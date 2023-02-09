@@ -31,6 +31,7 @@ body {
 a {
 	cursor: pointer;
 	text-decoration: none;
+	color: var(--color-default);
 }
 
 h1 {
@@ -39,18 +40,13 @@ h1 {
 }
 
 hr {
-	margin: 0 0 0.7em 0;
-	padding: 0;
-	border:  var(--color-hr);
-}
-
-p {
-	padding: 0.7em;
+	border: var(--color-hr);
 }
 
 quotes {
 	padding: 0.7em;
 	width: 200px;
+	display: block;
 }
 
 .dark-mode hr {
@@ -147,6 +143,35 @@ quotes {
 	--color-content-background: #1b1b1d;
 }
 
+.item {
+	padding: 0.7em;
+	cursor: pointer;
+}
+
+.item:hover {
+	background-color: var(--color-menu-background);
+}
+
+.dark-mode .item:hover {
+	--color-menu-background: #262930;
+}
+
+.item:active {
+	background-color: var(--color-link-active-background);
+}
+
+.dark-mode .item:active {
+	--color-link-active-background: #444750;
+}
+
+.item h3 {
+	color: var(--color-default);
+}
+
+.dark-mode .item h3 {
+	--color-default: #e2e0e5;
+}
+
 .modal {
 	top: 0;
 	width: 100%;
@@ -160,6 +185,21 @@ quotes {
 .dark-mode .modal {
 	--color-default: #e2e0e5;
 	--color-content-background: #1b1b1d;
+}
+
+.logo {
+	top: 0;
+	width: 100%;
+	min-height: 4.22em;
+	max-height: 4.22em;
+	position: sticky;
+	color: var(--color-default);
+	background-color: var(--color-menu-background);
+}
+
+.dark-mode .logo {
+	--color-default: #e2e0e5;
+	--color-menu-background: #262930;
 }
 
 .header {
@@ -252,6 +292,10 @@ quotes {
 	align-items: center;
 	flex-direction: row;
 	justify-content: space-between;
+}
+
+.nav {
+	margin: 0.7em 0 0 0;
 }
 
 .nav i {

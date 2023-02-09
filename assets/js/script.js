@@ -61,23 +61,314 @@ function wrap(elem) {
 	switch(elem.id) {
 		case 'myProjectsButton':
 			page.innerHTML = '';
-			let keys = Object.keys(myProjects.info);
+			let keys = Object.keys(myProjects.info.attachments);
 			for (var i = 0, l = keys.length; i < l; i++) {
 				let newItem = document.createElement('div');
 				newItem.id = keys[i];
 				newItem.name = 'item';
 				newItem.className = 'item';
-				let newName = document.createElement('h2');
-				newName.innerHTML = myProjects.info.attachments[keys[i]].name;
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
 				let newTitle = document.createElement('p');
-				newTitle.innerHTML = myProjects.info.attachments[keys[i]].title;
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
 				let newDescription = document.createElement('p');
-				newDescription.innerHTML = myProjects.info.attachments[keys[i]].description;
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
 				newItem.append(newName);
 				newItem.append(newTitle);
 				newItem.append(newDescription);
 				page.append(newItem);
 			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+			for (var i = 0, l = keys.length; i < l; i++) {
+				let newItem = document.createElement('div');
+				newItem.id = keys[i];
+				newItem.name = 'item';
+				newItem.className = 'item';
+				let newName = document.createElement('h3');
+				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
+				let newTitle = document.createElement('p');
+				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
+				let newDescription = document.createElement('p');
+				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newName);
+				newItem.append(newTitle);
+				newItem.append(newDescription);
+				page.append(newItem);
+			}
+
+
 			break;
 
 		default:
