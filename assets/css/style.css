@@ -82,6 +82,10 @@ quotes {
 	display: none;
 }
 
+.clear {
+	clear: left;
+}
+
 .menu {
 	width: 300px;
 	height: 100%;

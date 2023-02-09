@@ -1,3 +1,5 @@
+const siteURL = 'https://jebance.github.io/';
+
 let darkModeState = false;
 const useDark = window.matchMedia("(prefers-color-scheme: dark)");
 
@@ -67,16 +69,24 @@ function wrap(elem) {
 				newItem.id = keys[i];
 				newItem.name = 'item';
 				newItem.className = 'item';
+				let newImg = document.createElement('img');
+				newImg.src = siteURL + myProjects.info.attachments[keys[i]]['icon'];
+				newImg.style.float = 'left';
+				newImg.style.margin = '0.7em 0.7em 0.7em 0';
 				let newName = document.createElement('h3');
 				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
 				let newTitle = document.createElement('p');
 				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
 				let newDescription = document.createElement('p');
 				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newImg);
 				newItem.append(newName);
 				newItem.append(newTitle);
 				newItem.append(newDescription);
+				let newClear = document.createElement('div');
+				newClear.className = 'clear';
 				page.append(newItem);
+				page.append(newClear);
 			}
 
 			for (var i = 0, l = keys.length; i < l; i++) {
@@ -84,16 +94,24 @@ function wrap(elem) {
 				newItem.id = keys[i];
 				newItem.name = 'item';
 				newItem.className = 'item';
+				let newImg = document.createElement('img');
+				newImg.src = siteURL + myProjects.info.attachments[keys[i]]['icon'];
+				newImg.style.float = 'left';
+				newImg.style.margin = '0.7em 0.7em 0.7em 0';
 				let newName = document.createElement('h3');
 				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
 				let newTitle = document.createElement('p');
 				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
 				let newDescription = document.createElement('p');
 				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newImg);
 				newItem.append(newName);
 				newItem.append(newTitle);
 				newItem.append(newDescription);
+				let newClear = document.createElement('div');
+				newClear.className = 'clear';
 				page.append(newItem);
+				page.append(newClear);
 			}
 
 			for (var i = 0, l = keys.length; i < l; i++) {
@@ -101,16 +119,24 @@ function wrap(elem) {
 				newItem.id = keys[i];
 				newItem.name = 'item';
 				newItem.className = 'item';
+				let newImg = document.createElement('img');
+				newImg.src = siteURL + myProjects.info.attachments[keys[i]]['icon'];
+				newImg.style.float = 'left';
+				newImg.style.margin = '0.7em 0.7em 0.7em 0';
 				let newName = document.createElement('h3');
 				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
 				let newTitle = document.createElement('p');
 				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
 				let newDescription = document.createElement('p');
 				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
+				newItem.append(newImg);
 				newItem.append(newName);
 				newItem.append(newTitle);
 				newItem.append(newDescription);
+				let newClear = document.createElement('div');
+				newClear.className = 'clear';
 				page.append(newItem);
+				page.append(newClear);
 			}
 			break;
 
