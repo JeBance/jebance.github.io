@@ -76,6 +76,6 @@ container.generate = async function()
 		config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
 	});
 	console.log('encrypted: '+encrypted);
-	downloadNZPGPhref.setAttribute('href', 'data:nz/pgp,' + encrypted);
+	downloadNZPGPhref.setAttribute('href', 'data:nz/pgp,' + encodeURIComponent(encrypted));
 	downloadNZPGPhref.setAttribute('download', fingerprint + '.nz');
 }
