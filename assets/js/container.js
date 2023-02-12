@@ -1,6 +1,6 @@
 container.click = async function(elem)
 {
-	for (let i = 0, l = containerElements.length; i < l; i++) containerElements[0].hide();
+	for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
 	switch(elem.id) {
 		case 'containerBrowse':
 			break;

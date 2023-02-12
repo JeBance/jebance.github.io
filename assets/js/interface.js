@@ -17,7 +17,7 @@ async function wrap(elem)
 			break;
 
 		case 'menuButtonSettings':
-			for (let i = 0, l = containerElements.length; i < l; i++) containerElements[0].hide();
+			for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
 			if (localStorage.getItem('publicKey')) {
 				publicKey = await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') });
 				containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
