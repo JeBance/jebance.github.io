@@ -14,7 +14,14 @@ String.prototype.isJsonString = function()
 
 Object.prototype.hide = function() { this.className = 'hide'; }
 
-Object.prototype.show = function() { this.className = 'show'; }
+Object.prototype.show = function(attribute = null)
+{
+	if (attribute == null) {
+		this.className = 'show';
+	} else {
+		this.setAttribute('class', attribute);
+	}
+}
 
 Object.prototype.incorrect = async function()
 {

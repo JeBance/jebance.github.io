@@ -5,8 +5,6 @@ container.click = async function(elem)
 			break;
 
 		case 'containerCreate':
-			containerBrowse.hide();
-			containerCreate.hide();
 			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
 			containerNameInput.show();
 			containerEmailInput.show();
