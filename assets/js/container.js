@@ -25,7 +25,7 @@ container.click = function(elem)
 			if (containerPasswordInput.value.length > 7) {
 				if (containerNameInput.value.length > 0) {
 					if (containerEmailInput.value.length > 0) {
-						if (isEmailValid(containerEmailInput.value)) {
+						if (EMAIL_REGEXP.test(containerEmailInput.value)) {
 							loader.show();
 							const { privateKey, publicKey } = await openpgp.generateKey({
 								type: 'rsa',
