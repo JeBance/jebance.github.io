@@ -18,12 +18,13 @@ async function wrap(elem)
 
 		case 'menuButtonSettings':
 			if (localStorage.getItem('publicKey')) {
-				const publicKey = await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') });
+				publicKey = await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') });
 				containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
 			} else {
 				containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
-				containerBrowse.className = 'show';
-				containerCreate.className = 'show';
+				if (containerElements) for (let i = 0, l = containerElements.length; i < l; i++) containerElements[0].hide();
+				containerBrowse.show();
+				containerCreate.show();
 			}
 			accountPage.show();
 			break;

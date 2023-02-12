@@ -63,14 +63,14 @@
 						<div id="container" class="container">
 							<h2>Контейнер</h2>
 							<p id="containerInfo">Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.</p>
-							<button id="containerBrowse" onclick="container.click(this)" class="hide">Подключить</button>
-							<button id="containerCreate" onclick="container.click(this)" class="hide">Создать</button>
-							<input id="containerNameInput" type="text" placeholder="Никнейм" class="hide selectable">
-							<input id="containerEmailInput" type="email" placeholder="E-mail" class="hide selectable">
-							<input id="containerPasswordInput" type="password" placeholder="Пароль" class="hide selectable">
-							<button id="containerPasswordAccept" onclick="container.click(this)" class="hide">Подтвердить</button>
-							<button id="containerSave" onclick="container.click(this)" class="hide">Сохранить</button>
-							<button id="containerOff" onclick="container.click(this)" class="hide">Отключить</button>
+							<button id="containerBrowse" onclick="container.click(this)" class="hide" name="container">Подключить</button>
+							<button id="containerCreate" onclick="container.click(this)" class="hide" name="container">Создать</button>
+							<input id="containerNameInput" type="text" placeholder="Никнейм" class="hide selectable" name="container">
+							<input id="containerEmailInput" type="email" placeholder="E-mail" class="hide selectable" name="container">
+							<input id="containerPasswordInput" type="password" placeholder="Пароль" class="hide selectable" name="container">
+							<button id="containerPasswordAccept" onclick="container.click(this)" class="hide" name="container">Подтвердить</button>
+							<button id="containerSave" onclick="container.click(this)" class="hide" name="container">Сохранить</button>
+							<button id="containerOff" onclick="container.click(this)" class="hide" name="container">Отключить</button>
 						</div>
 					</div>
 				</div>

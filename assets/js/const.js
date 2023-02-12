@@ -1,6 +1,7 @@
 const VERSION = '0.3.1';
 const API_URL = 'https://jebance.ru/api.php';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+const containerElements = document.getElementsByName("container");
 
 String.prototype.isJsonString = function()
 {
