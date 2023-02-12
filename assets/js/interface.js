@@ -17,17 +17,13 @@ function wrap(elem)
 			break;
 
 		case 'menuButtonSettings':
-			if (localStorage.getItem('pubKey')) {
+			if (localStorage.getItem('publicKey')) {
+				const publicKey = await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') });
+				containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
 			} else {
 				containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
 				containerBrowse.className = 'show';
 				containerCreate.className = 'show';
-				containerNameInput.className = 'hide';
-				containerEmailInput.className = 'hide';
-				containerPasswordInput.className = 'hide';
-				containerPasswordAccept.className = 'hide';
-				containerSave.className = 'hide';
-				containerOff.className = 'hide';
 			}
 			accountPage.show();
 			break;

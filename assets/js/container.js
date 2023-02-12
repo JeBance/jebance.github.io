@@ -1,6 +1,5 @@
 container.click = async function(elem)
 {
-	console.log(elem.id);
 	switch(elem.id) {
 		case 'containerBrowse':
 			break;
@@ -34,9 +33,16 @@ container.click = async function(elem)
 								passphrase: containerPasswordInput.value
 							});
 							localStorage.setItem('publicKey', publicKey);
-							localStorage.setItem('privateKey', privateKey)
-							console.log(localStorage.getItem('publicKey'));
-							console.log(localStorage.getItem('privateKey'));
+							localStorage.setItem('privateKey', privateKey);
+							localStorage.setItem('passphrase', containerPasswordInput.value);
+							containerNameInput.value = '';
+							containerEmailInput.value = '';
+							containerPasswordInput.value = '';
+							containerNameInput.hide();
+							containerEmailInput.hide();
+							containerPasswordInput.hide();
+							containerPasswordAccept.hide();
+							containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
 							loader.hide();
 						} else {
 							alert('Вы ввели некорректный email!');
