@@ -12,16 +12,6 @@ String.prototype.isJsonString = function()
 	return true;
 }
 
-Object.prototype.hide = function()
-{
-	this.className = 'hide';
-}
-
-Object.prototype.show = function()
-{
-	this.className = 'show';
-}
-
 Object.prototype.incorrect = async function()
 {
 	this.classList.toggle('red');
