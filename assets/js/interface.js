@@ -6,7 +6,7 @@ hide.pages = function()
 	accountPage.hide();
 }
 
-function wrap(elem)
+async function wrap(elem)
 {
 	menu.animation();
 	window.onresize();
