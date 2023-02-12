@@ -55,6 +55,7 @@ function loadModules(step, name)
 			window.i = null;
 			window.keys = null;
 			window.step = null;
+			loader.hide();
 		}
 	};
 	script.onerror = function() {
