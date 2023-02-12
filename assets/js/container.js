@@ -5,13 +5,13 @@ container.click = function(elem)
 			break;
 
 		case 'containerCreate':
-			containerBrowse.hide();
-			containerCreate.hide();
+			containerBrowse.className = 'hide';
+			containerCreate.className = 'hide';
 			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
-			containerNameInput.show();
-			containerEmailInput.show();
-			containerPasswordInput.show();
-			containerPasswordAccept.show();
+			containerNameInput.className = 'show';
+			containerEmailInput.className = 'show';
+			containerPasswordInput.className = 'show';
+			containerPasswordAccept.className = 'show';
 			break;
 
 		case 'containerSave':
