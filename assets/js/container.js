@@ -14,6 +14,7 @@ container.click = async function(elem)
 			break;
 
 		case 'containerSave':
+			downloadHref.click()
 			break;
 
 		case 'containerPasswordAccept':
@@ -41,7 +42,29 @@ container.click = async function(elem)
 							containerEmailInput.hide();
 							containerPasswordInput.hide();
 							containerPasswordAccept.hide();
-							containerInfo.innerHTML = '<b>Отпечаток:</b> ' + (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+							containerInfo.innerHTML = 'Генерация контейнера ...';
+							fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+							containerInfo.innerHTML = '<b>Отпечаток:</b> ' + fingerprint;
+							let NZPGP = JSON.stringify({
+								publicKey: localStorage.getItem('publicKey'),
+								privateKey: localStorage.getItem('privateKey'),
+								passphrase: localStorage.getItem('passphrase'),
+								fingerprint: fingerprint
+							});
+							console.log('NZPGP: '+NZPGP);
+							const encrypted = await openpgp.encrypt({
+								message: await openpgp.createMessage({ text: NZPGP }),
+								passwords: [ localStorage.getItem('passphrase') ],
+								config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
+							});
+							console.log('encrypted: '+encrypted);
+							let downloadHref = document.createElement('a');
+							downloadHref.id = 'downloadHref';
+							downloadHref.setAttribute('href', 'data:nz/pgp,' + encrypted);
+							downloadHref.setAttribute('download', fingerprint + '.nz');
+							downloadHref.hide();
+							right.append(downloadHref);
+							containerSave.show();
 							loader.hide();
 						} else {
 							alert('Вы ввели некорректный email!');
