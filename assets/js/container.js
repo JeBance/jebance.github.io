@@ -14,7 +14,7 @@ container.click = async function(elem)
 			break;
 
 		case 'containerSave':
-			downloadHref.click()
+			downloadNZPGPhref.click()
 			break;
 
 		case 'containerPasswordAccept':
@@ -43,27 +43,7 @@ container.click = async function(elem)
 							containerPasswordInput.hide();
 							containerPasswordAccept.hide();
 							containerInfo.innerHTML = 'Генерация контейнера ...';
-							fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
-							containerInfo.innerHTML = '<b>Отпечаток:</b> ' + fingerprint;
-							let NZPGP = JSON.stringify({
-								publicKey: localStorage.getItem('publicKey'),
-								privateKey: localStorage.getItem('privateKey'),
-								passphrase: localStorage.getItem('passphrase'),
-								fingerprint: fingerprint
-							});
-							console.log('NZPGP: '+NZPGP);
-							const encrypted = await openpgp.encrypt({
-								message: await openpgp.createMessage({ text: NZPGP }),
-								passwords: [ localStorage.getItem('passphrase') ],
-								config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
-							});
-							console.log('encrypted: '+encrypted);
-							let downloadHref = document.createElement('a');
-							downloadHref.id = 'downloadHref';
-							downloadHref.setAttribute('href', 'data:nz/pgp,' + encrypted);
-							downloadHref.setAttribute('download', fingerprint + '.nz');
-							downloadHref.hide();
-							right.append(downloadHref);
+							await container.generate();
 							containerSave.show();
 							loader.hide();
 						} else {
@@ -77,4 +57,25 @@ container.click = async function(elem)
 		default:
 			break;
 	}
+}
+
+container.generate = async function()
+{
+	fingerprint = (await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') })).getFingerprint();
+	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + fingerprint;
+	let NZPGP = JSON.stringify({
+		publicKey: localStorage.getItem('publicKey'),
+		privateKey: localStorage.getItem('privateKey'),
+		passphrase: localStorage.getItem('passphrase'),
+		fingerprint: fingerprint
+	});
+	console.log('NZPGP: '+NZPGP);
+	const encrypted = await openpgp.encrypt({
+		message: await openpgp.createMessage({ text: NZPGP }),
+		passwords: [ localStorage.getItem('passphrase') ],
+		config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
+	});
+	console.log('encrypted: '+encrypted);
+	downloadNZPGPhref.setAttribute('href', 'data:nz/pgp,' + encrypted);
+	downloadNZPGPhref.setAttribute('download', fingerprint + '.nz');
 }

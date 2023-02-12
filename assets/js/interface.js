@@ -18,9 +18,9 @@ async function wrap(elem)
 
 		case 'menuButtonSettings':
 			for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
-			if (localStorage.getItem('publicKey')) {
-				publicKey = await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') });
-				containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
+			if (localStorage.getItem('publicKey') && localStorage.getItem('privateKey') && localStorage.getItem('passphrase')) {
+				await container.generate();
+				containerSave.show();
 			} else {
 				containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
 				containerBrowse.show();
