@@ -1,47 +1,156 @@
-const siteURL = 'https://jebance.github.io/';
+const SITE_URL = 'https://jebance.github.io/';
 
-let darkModeState = false;
-const useDark = window.matchMedia("(prefers-color-scheme: dark)");
+//localStorage.clear();
+jsCheck.parentNode.removeChild(jsCheck);
+loader.hide = function() { loader.className = 'hide'; }
+loader.show = function() { loader.className = 'loaderBackground'; }
+loader.show();
 
-function toggleDarkMode(state) {
-	document.documentElement.classList.toggle("dark-mode", state);
-	darkModeState = state;
-	lamp.checked = !state;
+function sleep(ms) {
+  return new Promise(
+    resolve => setTimeout(resolve, ms)
+  );
 }
 
-function setDarkModeLocalStorage(state) {
-	localStorage.setItem("dark-mode", state);
+progress.hide = async function()
+{
+	bar.style.width = '100%';
+	await sleep(5000);
+	progress.className = 'hide';
+	bar.className = 'hide';
+	bar.width = 0;
+}
+progress.show = function() {
+	progress.className = 'progress';
+	bar.className = 'bar';
+}
+bar.move = function(step, description, color)
+{
+	if ((progress.className == 'hide') && (bar.className == 'hide')) {
+		progress.show();
+		bar.style.width = '0%';
+	}
+
+	bar.width = bar.width + step;
+	progress.innerHTML = '&emsp;' + bar.width + '%&emsp;' + description;
+	bar.innerHTML = '&emsp;' + bar.width + '%&emsp;' + description;
+	bar.style.background = color;
+	bar.style.width = bar.width + '%';
+}
+bar.width = 0;
+
+function loadModules(step, name)
+{
+	bar.move(step, 'Loading modules', 'white');
+	script = document.createElement('script');
+	script.src = SITE_URL + 'assets/js/' + name;
+	document.head.append(script);
+	script.onload = function() {
+		i++;
+		if (i < keys.length) {
+			loadModules(step, modules[keys[i]]);
+		} else {
+			bar.move((100 - bar.width), 'Version: ' + VERSION, 'white');
+			progress.hide();
+			window.i = null;
+			window.keys = null;
+			window.step = null;
+		}
+	};
+	script.onerror = function() {
+		bar.move(0, '"' + name + '" loading error', '#F08080');
+		loader.hide();
+	};
 }
 
-if ((localStorage.getItem("dark-mode") == "true")
-|| ((useDark.matches) && (localStorage.getItem("dark-mode") !== "false")))
-toggleDarkMode(true);
-
-//useDark.addListener((evt) => toggleDarkMode(evt.matches));
-
-lamp.onclick = function() {
-	darkModeState = !darkModeState;
-	toggleDarkMode(darkModeState);
-	setDarkModeLocalStorage(darkModeState);
-}
-
-menu.animation = function() {
-	if ((menu.className == 'menu') || (menu.className == 'hideMenu menu')) {
-		menu.className = ('showMenu menu');
-		hide.className = ('background');
-	} else {
-		menu.className = ('hideMenu menu');
-		hide.className = ('hide');
+function scanScripts()
+{
+	let requestURL = SITE_URL + 'assets/js/scripts.json';
+	let request = new XMLHttpRequest();
+	request.open('GET', requestURL);
+	request.responseType = 'json';
+	request.send();
+	request.onload = function() {
+		let response = request.response;
+		//console.log(response);
+		let keys = Object.keys(response);
+		//console.log(keys);
+		let result = '';
+		for (let i = 0, l = keys.length; i < l; i++) {
+			modules.push(response[keys[i]]);
+		}
+		return modules;
+	}
+	request.onerror = function() {
+		scanScripts();
 	}
 }
 
-window.onresize = function() {
-	if (document.documentElement.clientWidth > 799) {
-		menu.className = ('menu');
-		hide.className = ('hide');
+let modules = [];
+let keys;
+let step;
+let i = 0;
+scanScripts();
+chS = setInterval(checkScripts, 100);
+function checkScripts()
+{
+	keys = Object.keys(modules);
+	if (keys.length > 0) {
+		clearInterval(chS);
+		step = parseInt(100 / keys.length);
+		//step = parseFloat((100 / keys.length).toFixed(2));
+		bar.move(0, 'Loading modules', 'white');
+		loadModules(step, modules[keys[i]])
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 let myProjects = new Object();
 myProjects.refresh = function()
 {
@@ -58,85 +167,42 @@ myProjects.refresh = function()
 	}
 }
 myProjects.refresh();
+*/
 
-function wrap(elem) {
+container.click = function(elem)
+{
 	switch(elem.id) {
-		case 'myProjectsButton':
-			page.innerHTML = '';
-			let keys = Object.keys(myProjects.info.attachments);
-			for (var i = 0, l = keys.length; i < l; i++) {
-				let newItem = document.createElement('div');
-				newItem.id = keys[i];
-				newItem.name = 'item';
-				newItem.className = 'item';
-				let newImg = document.createElement('img');
-				newImg.src = siteURL + myProjects.info.attachments[keys[i]]['icon'];
-				newImg.style.float = 'left';
-				newImg.style.margin = '0.7em 0.7em 0.7em 0';
-				let newName = document.createElement('h3');
-				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
-				let newTitle = document.createElement('p');
-				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
-				let newDescription = document.createElement('p');
-				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
-				newItem.append(newImg);
-				newItem.append(newName);
-				newItem.append(newTitle);
-				newItem.append(newDescription);
-				let newClear = document.createElement('div');
-				newClear.className = 'clear';
-				page.append(newItem);
-				page.append(newClear);
-			}
+		case 'containerBrowse':
+			break;
 
-			for (var i = 0, l = keys.length; i < l; i++) {
-				let newItem = document.createElement('div');
-				newItem.id = keys[i];
-				newItem.name = 'item';
-				newItem.className = 'item';
-				let newImg = document.createElement('img');
-				newImg.src = siteURL + myProjects.info.attachments[keys[i]]['icon'];
-				newImg.style.float = 'left';
-				newImg.style.margin = '0.7em 0.7em 0.7em 0';
-				let newName = document.createElement('h3');
-				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
-				let newTitle = document.createElement('p');
-				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
-				let newDescription = document.createElement('p');
-				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
-				newItem.append(newImg);
-				newItem.append(newName);
-				newItem.append(newTitle);
-				newItem.append(newDescription);
-				let newClear = document.createElement('div');
-				newClear.className = 'clear';
-				page.append(newItem);
-				page.append(newClear);
-			}
+		case 'containerCreate':
+			containerBrowse.className = 'hide';
+			containerCreate.className = 'hide';
+			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
+			containerNameInput.className = 'show';
+			containerEmailInput.className = 'show';
+			containerPasswordInput.className = 'show';
+			containerPasswordAccept.className = 'show';
+			break;
 
-			for (var i = 0, l = keys.length; i < l; i++) {
-				let newItem = document.createElement('div');
-				newItem.id = keys[i];
-				newItem.name = 'item';
-				newItem.className = 'item';
-				let newImg = document.createElement('img');
-				newImg.src = siteURL + myProjects.info.attachments[keys[i]]['icon'];
-				newImg.style.float = 'left';
-				newImg.style.margin = '0.7em 0.7em 0.7em 0';
-				let newName = document.createElement('h3');
-				newName.innerHTML = myProjects.info.attachments[keys[i]]['name'];
-				let newTitle = document.createElement('p');
-				newTitle.innerHTML = myProjects.info.attachments[keys[i]]['title'];
-				let newDescription = document.createElement('p');
-				newDescription.innerHTML = myProjects.info.attachments[keys[i]]['description'];
-				newItem.append(newImg);
-				newItem.append(newName);
-				newItem.append(newTitle);
-				newItem.append(newDescription);
-				let newClear = document.createElement('div');
-				newClear.className = 'clear';
-				page.append(newItem);
-				page.append(newClear);
+		case 'containerSave':
+			break;
+
+		case 'containerPasswordAccept':
+			if (containerNameInput.value.length == 0) alert('Введите никнейм!');
+			if (containerEmailInput.value.length == 0) alert('Введите email!');
+			if (containerPasswordInput.value.length < 8) alert('Короткий пароль!');
+
+			if (containerPasswordInput.value.length > 7) {
+				if (containerNameInput.value.length > 0) {
+					if (containerEmailInput.value.length > 0) {
+						if (isEmailValid(containerEmailInput.value)) {
+							generatePGPkeys(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value)
+						} else {
+							alert('Вы ввели некорректный email!');
+						}
+					}
+				}
 			}
 			break;
 
@@ -144,3 +210,29 @@ function wrap(elem) {
 			break;
 	}
 }
+
+async function generatePGPkeys(name, email, password)
+{
+    const { privateKey, publicKey } = await openpgp.generateKey({
+        type: 'rsa',
+        rsaBits: 4096,
+        userIDs: [{ name: name, email: email }],
+        passphrase: password
+    });
+//	pubKey.textContent = publicKey;
+//	privKey.textContent = privateKey;
+    console.log(publicKey);
+    console.log(privateKey);
+}
+
+
+
+/*
+var script = document.createElement('script');
+script.onload = function () {
+    // Скрипт был загружен
+};
+
+document.head.appendChild(script);
+script.src = 'урл к вашему файлу';
+*/
