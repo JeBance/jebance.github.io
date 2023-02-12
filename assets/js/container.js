@@ -33,8 +33,10 @@ container.click = function(elem)
 								userIDs: [{ name: containerNameInput.value, email: containerEmailInput.value }],
 								passphrase: containerPasswordInput.value
 							});
-							console.log(publicKey);
-							console.log(privateKey);
+							localStorage.setItem('publicKey', publicKey);
+							localStorage.setItem('privateKey', privateKey)
+							console.log(localStorage.getItem('publicKey'));
+							console.log(localStorage.getItem('privateKey'));
 							loader.hide();
 						} else {
 							alert('Вы ввели некорректный email!');
