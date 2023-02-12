@@ -7,23 +7,26 @@ loader.show = function() { loader.className = 'loaderBackground'; }
 loader.show();
 
 function sleep(ms) {
-  return new Promise(
-    resolve => setTimeout(resolve, ms)
-  );
+	return new Promise(
+		resolve => setTimeout(resolve, ms)
+	);
 }
 
 progress.hide = async function()
 {
 	bar.style.width = '100%';
-	await sleep(5000);
+	await sleep(3000);
 	progress.className = 'hide';
 	bar.className = 'hide';
 	bar.width = 0;
 }
-progress.show = function() {
+
+progress.show = function()
+{
 	progress.className = 'progress';
 	bar.className = 'bar';
 }
+
 bar.move = function(step, description, color)
 {
 	if ((progress.className == 'hide') && (bar.className == 'hide')) {
@@ -170,61 +173,6 @@ myProjects.refresh = function()
 myProjects.refresh();
 */
 
-container.click = function(elem)
-{
-	switch(elem.id) {
-		case 'containerBrowse':
-			break;
-
-		case 'containerCreate':
-			containerBrowse.className = 'hide';
-			containerCreate.className = 'hide';
-			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
-			containerNameInput.className = 'show';
-			containerEmailInput.className = 'show';
-			containerPasswordInput.className = 'show';
-			containerPasswordAccept.className = 'show';
-			break;
-
-		case 'containerSave':
-			break;
-
-		case 'containerPasswordAccept':
-			if (containerNameInput.value.length == 0) alert('Введите никнейм!');
-			if (containerEmailInput.value.length == 0) alert('Введите email!');
-			if (containerPasswordInput.value.length < 8) alert('Короткий пароль!');
-
-			if (containerPasswordInput.value.length > 7) {
-				if (containerNameInput.value.length > 0) {
-					if (containerEmailInput.value.length > 0) {
-						if (isEmailValid(containerEmailInput.value)) {
-							generatePGPkeys(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value)
-						} else {
-							alert('Вы ввели некорректный email!');
-						}
-					}
-				}
-			}
-			break;
-
-		default:
-			break;
-	}
-}
-
-async function generatePGPkeys(name, email, password)
-{
-    const { privateKey, publicKey } = await openpgp.generateKey({
-        type: 'rsa',
-        rsaBits: 4096,
-        userIDs: [{ name: name, email: email }],
-        passphrase: password
-    });
-//	pubKey.textContent = publicKey;
-//	privKey.textContent = privateKey;
-    console.log(publicKey);
-    console.log(privateKey);
-}
 
 
 
