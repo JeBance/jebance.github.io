@@ -2,8 +2,8 @@ let hide = new Object();
 
 hide.pages = function()
 {
-	infoPage.className = 'hide';
-	accountPage.className = 'hide';
+	infoPage.hide();
+	accountPage.hide();
 }
 
 function wrap(elem)
