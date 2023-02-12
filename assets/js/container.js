@@ -41,7 +41,7 @@ container.click = async function(elem)
 							containerEmailInput.hide();
 							containerPasswordInput.hide();
 							containerPasswordAccept.hide();
-							containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
+							containerInfo.innerHTML = '<b>Отпечаток:</b> ' + (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
 							loader.hide();
 						} else {
 							alert('Вы ввели некорректный email!');
