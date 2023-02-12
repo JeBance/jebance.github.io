@@ -1,4 +1,4 @@
-container.click = function(elem)
+container.click = async function(elem)
 {
 	console.log(elem.id);
 	switch(elem.id) {
