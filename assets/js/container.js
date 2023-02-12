@@ -1,5 +1,6 @@
 container.click = function(elem)
 {
+	console.log(elem.id);
 	switch(elem.id) {
 		case 'containerBrowse':
 			break;
@@ -21,7 +22,6 @@ container.click = function(elem)
 			if (containerNameInput.value.length == 0) alert('Введите никнейм!');
 			if (containerEmailInput.value.length == 0) alert('Введите email!');
 			if (containerPasswordInput.value.length < 8) alert('Короткий пароль!');
-
 			if (containerPasswordInput.value.length > 7) {
 				if (containerNameInput.value.length > 0) {
 					if (containerEmailInput.value.length > 0) {

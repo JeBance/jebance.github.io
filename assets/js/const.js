@@ -1,5 +1,6 @@
 const VERSION = '0.3.1';
 const API_URL = 'https://jebance.ru/api.php';
+const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
 String.prototype.isJsonString = function()
 {
@@ -10,12 +11,12 @@ String.prototype.isJsonString = function()
 	}
 	return true;
 }
-
+/*
 Object.prototype.hide = function()
 {
 	this.className = 'hide';
 }
-
+*/
 Object.prototype.show = function()
 {
 	this.className = 'show';
