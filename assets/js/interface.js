@@ -17,12 +17,12 @@ async function wrap(elem)
 			break;
 
 		case 'menuButtonSettings':
+			for (let i = 0, l = containerElements.length; i < l; i++) containerElements[0].hide();
 			if (localStorage.getItem('publicKey')) {
 				publicKey = await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') });
 				containerInfo.innerHTML = '<b>Отпечаток:</b> ' + publicKey.getFingerprint();
 			} else {
 				containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
-				if (containerElements) for (let i = 0, l = containerElements.length; i < l; i++) containerElements[0].hide();
 				containerBrowse.show();
 				containerCreate.show();
 			}
