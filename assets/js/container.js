@@ -36,33 +36,57 @@ container.click = async function(elem)
 			break;
 
 		case 'containerPasswordAccept':
-			if (containerNameInput.value.length == 0) alert('Введите никнейм!');
-			if (containerEmailInput.value.length == 0) alert('Введите email!');
 			if (containerPasswordInput.value.length < 8) alert('Короткий пароль!');
-			if (containerPasswordInput.value.length > 7) {
-				if (containerNameInput.value.length > 0) {
-					if (containerEmailInput.value.length > 0) {
-						if (EMAIL_REGEXP.test(containerEmailInput.value)) {
-							loader.show();
-							const { privateKey, publicKey } = await openpgp.generateKey({
-								type: 'rsa',
-								rsaBits: 4096,
-								userIDs: [{ name: containerNameInput.value, email: containerEmailInput.value }],
-								passphrase: containerPasswordInput.value
-							});
-							localStorage.setItem('publicKey', publicKey);
-							localStorage.setItem('privateKey', privateKey);
-							localStorage.setItem('passphrase', containerPasswordInput.value);
-							containerNameInput.value = '';
-							containerEmailInput.value = '';
-							containerPasswordInput.value = '';
-							containerElements.hide();
-							containerInfo.innerHTML = 'Генерация контейнера ...';
-							await container.generate();
-							containerSave.show();
-							loader.hide();
-						} else {
-							alert('Вы ввели некорректный email!');
+			if (file.data) {
+				const armMessage = await openpgp.readMessage({
+					armoredMessage: file.data
+				});
+				const { data: decrypted } = await openpgp.decrypt({
+					message: armMessage,
+					passwords: [ containerPasswordInput.value ],
+				});
+				if (decrypted.isJsonString()) {
+					let NZPGP = JSON.parse(decrypted);
+					const publicKey = await openpgp.readKey({ armoredKey: NZPGP.publicKey });
+					if (NZPGP.fingerprint == publicKey.getFingerprint()) {
+						localStorage.setItem('publicKey', NZPGP.publicKey);
+						localStorage.setItem('privateKey', NZPGP.privateKey);
+						localStorage.setItem('passphrase', NZPGP.passphrase);
+						containerElements.hide();
+						await container.generate();
+						containerSave.show();
+					}
+				} else {
+					alert('Неверный пароль!');
+				}
+			} else {
+				if (containerNameInput.value.length == 0) alert('Введите никнейм!');
+				if (containerEmailInput.value.length == 0) alert('Введите email!');
+				if (containerPasswordInput.value.length > 7) {
+					if (containerNameInput.value.length > 0) {
+						if (containerEmailInput.value.length > 0) {
+							if (EMAIL_REGEXP.test(containerEmailInput.value)) {
+								loader.show();
+								const { privateKey, publicKey } = await openpgp.generateKey({
+									type: 'rsa',
+									rsaBits: 4096,
+									userIDs: [{ name: containerNameInput.value, email: containerEmailInput.value }],
+									passphrase: containerPasswordInput.value
+								});
+								localStorage.setItem('publicKey', publicKey);
+								localStorage.setItem('privateKey', privateKey);
+								localStorage.setItem('passphrase', containerPasswordInput.value);
+								containerNameInput.value = '';
+								containerEmailInput.value = '';
+								containerPasswordInput.value = '';
+								containerElements.hide();
+								containerInfo.innerHTML = 'Генерация контейнера ...';
+								await container.generate();
+								containerSave.show();
+								loader.hide();
+							} else {
+								alert('Вы ввели некорректный email!');
+							}
 						}
 					}
 				}
