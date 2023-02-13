@@ -21,6 +21,7 @@ async function wrap(elem)
 			if (localStorage.getItem('publicKey') && localStorage.getItem('privateKey') && localStorage.getItem('passphrase')) {
 				await container.generate();
 				containerSave.show();
+				containerOff.show();
 			} else {
 				containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
 				containerBrowse.show();

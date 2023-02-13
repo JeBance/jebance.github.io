@@ -18,6 +18,16 @@ container.click = async function(elem)
 			downloadNZPGPhref.click()
 			break;
 
+		case 'containerOff':
+			localStorage.removeItem('publicKey');
+			localStorage.removeItem('privateKey');
+			localStorage.removeItem('passphrase');
+			containerElements.hide();
+			containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
+			containerBrowse.show();
+			containerCreate.show();
+			break;
+
 		case 'file':
 			let x = elem.files[0];
 			let reader = new FileReader();
@@ -55,6 +65,7 @@ container.click = async function(elem)
 						containerElements.hide();
 						await container.generate();
 						containerSave.show();
+						containerOff.show();
 						file.data = null;
 						file.x = null;
 					} else {
