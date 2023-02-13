@@ -55,6 +55,10 @@ container.click = async function(elem)
 						containerElements.hide();
 						await container.generate();
 						containerSave.show();
+						file.data = null;
+						file.x = null;
+					} else {
+						alert('Отпечаток публичного ключа не совпадает с фактическим!');
 					}
 				} else {
 					alert('Неверный пароль!');
