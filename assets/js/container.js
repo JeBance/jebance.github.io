@@ -19,7 +19,7 @@ container.click = async function(elem)
 			break;
 
 		case 'file':
-			let x = elem.input.files[0];
+			let x = elem.files[0];
 			let reader = new FileReader();
 			reader.readAsText(x);
 			reader.onload = function() {
