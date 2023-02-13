@@ -117,6 +117,6 @@ container.generate = async function()
 		passwords: [ localStorage.getItem('passphrase') ],
 		config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
 	});
-	downloadNZPGPhref.setAttribute('href', 'data:nz/pgp,' + encodeURIComponent(encrypted));
+	downloadNZPGPhref.setAttribute('href', 'data:application/pgp-encrypted,' + encodeURIComponent(encrypted));
 	downloadNZPGPhref.setAttribute('download', fingerprint + '.nz');
 }
