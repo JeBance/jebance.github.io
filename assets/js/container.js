@@ -1,12 +1,12 @@
 container.click = async function(elem)
 {
-	for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
 	switch(elem.id) {
 		case 'containerBrowse':
 			break;
 
 		case 'containerCreate':
 			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
+			containerElements.hide();
 			containerNameInput.show('selectable');
 			containerEmailInput.show('selectable');
 			containerPasswordInput.show('selectable');
@@ -38,10 +38,7 @@ container.click = async function(elem)
 							containerNameInput.value = '';
 							containerEmailInput.value = '';
 							containerPasswordInput.value = '';
-							containerNameInput.hide();
-							containerEmailInput.hide();
-							containerPasswordInput.hide();
-							containerPasswordAccept.hide();
+							containerElements.hide();
 							containerInfo.innerHTML = 'Генерация контейнера ...';
 							await container.generate();
 							containerSave.show();

@@ -17,7 +17,7 @@ async function wrap(elem)
 			break;
 
 		case 'menuButtonSettings':
-			for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
+			containerElements.hide();
 			if (localStorage.getItem('publicKey') && localStorage.getItem('privateKey') && localStorage.getItem('passphrase')) {
 				await container.generate();
 				containerSave.show();

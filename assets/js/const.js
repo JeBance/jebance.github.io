@@ -4,6 +4,11 @@ const API_URL = 'https://jebance.ru/api.php';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 const containerElements = document.getElementsByName("container");
 
+containerElements.hide = function() {
+	for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
+}
+
+
 String.prototype.isJsonString = function()
 {
 	try {
