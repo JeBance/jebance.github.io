@@ -83,6 +83,7 @@ container.click = async function(elem)
 							if (EMAIL_REGEXP.test(containerEmailInput.value)) {
 								loader.show();
 								passphrase = (await HMAC(containerPasswordInput.value, SITE_URL));
+								//HMAC(containerPasswordInput.value, SITE_URL).then(e => console.log(e))
 								const { privateKey, publicKey } = await openpgp.generateKey({
 									type: 'rsa',
 									rsaBits: 4096,

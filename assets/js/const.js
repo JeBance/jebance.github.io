@@ -18,15 +18,6 @@ async function HMAC(key, message)
 	return btoa(String.fromCharCode(...new Uint8Array(s)))
 }
 
-async function HMAC(key, message){
-  const g = str => new Uint8Array([...unescape(encodeURIComponent(str))].map(c => c.charCodeAt(0))),
-  k = g(key),
-  m = g(message),
-  c = await crypto.subtle.importKey('raw', k, { name: 'HMAC', hash: 'SHA-256' },true, ['sign']),
-  s = await crypto.subtle.sign('HMAC', c, m);
-  return btoa(String.fromCharCode(...new Uint8Array(s)))
-}
-
 String.prototype.isJsonString = function()
 {
 	try {
