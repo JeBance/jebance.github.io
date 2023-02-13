@@ -1,4 +1,4 @@
-const VERSION = '0.3.11';
+const VERSION = '0.3.12';
 console.log('VERSION: '+VERSION);
 const API_URL = 'https://jebance.ru/api.php';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
@@ -13,7 +13,7 @@ async function HMAC(key, message)
 	const g = str => new Uint8Array([...unescape(encodeURIComponent(str))].map(c => c.charCodeAt(0))),
 	k = g(key),
 	m = g(message),
-	c = await crypto.subtle.importKey('raw', k, { name: 'HMAC', hash: 'SHA-512' },true, ['sign']),
+	c = await crypto.subtle.importKey('raw', k, { name: 'HMAC', hash: 'SHA-512' }, true, ['sign']),
 	s = await crypto.subtle.sign('HMAC', c, m);
 	return btoa(String.fromCharCode(...new Uint8Array(s)))
 }
