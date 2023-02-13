@@ -2,6 +2,7 @@ container.click = async function(elem)
 {
 	switch(elem.id) {
 		case 'containerBrowse':
+			file.click();
 			break;
 
 		case 'containerCreate':
@@ -15,6 +16,23 @@ container.click = async function(elem)
 
 		case 'containerSave':
 			downloadNZPGPhref.click()
+			break;
+
+		case 'file':
+			let x = elem.input.files[0];
+			let reader = new FileReader();
+			reader.readAsText(x);
+			reader.onload = function() {
+				file.x = x;
+				file.data = reader.result;
+				containerElements.hide();
+				containerInfo.innerHTML = 'Введите пароль для дешифровки контейнера.';
+				containerPasswordInput.show();
+				containerPasswordAccept.show();
+			};
+			reader.onerror = function() {
+				alert(reader.error);
+			};
 			break;
 
 		case 'containerPasswordAccept':
@@ -66,13 +84,11 @@ container.generate = async function()
 		passphrase: localStorage.getItem('passphrase'),
 		fingerprint: fingerprint
 	});
-	console.log('NZPGP: '+NZPGP);
 	const encrypted = await openpgp.encrypt({
 		message: await openpgp.createMessage({ text: NZPGP }),
 		passwords: [ localStorage.getItem('passphrase') ],
 		config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
 	});
-	console.log('encrypted: '+encrypted);
 	downloadNZPGPhref.setAttribute('href', 'data:nz/pgp,' + encodeURIComponent(encrypted));
 	downloadNZPGPhref.setAttribute('download', fingerprint + '.nz');
 }
