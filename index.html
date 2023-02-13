@@ -67,7 +67,7 @@
 							<button id="containerCreate" onclick="container.click(this)" class="hide" name="container">Создать</button>
 							<input id="containerNameInput" type="text" placeholder="Никнейм" class="hide selectable" name="container">
 							<input id="containerEmailInput" type="email" placeholder="E-mail" class="hide selectable" name="container">
-							<input id="containerPasswordInput" type="password" placeholder="Пароль" class="hide selectable" name="container">
+							<input id="containerPasswordInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="password" placeholder="Пароль" class="hide selectable" name="container">
 							<button id="containerPasswordAccept" onclick="container.click(this)" class="hide" name="container">Подтвердить</button>
 							<button id="containerSave" onclick="container.click(this)" class="hide" name="container">Сохранить</button>
 							<button id="containerOff" onclick="container.click(this)" class="hide" name="container">Отключить</button>
