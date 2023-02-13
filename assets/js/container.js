@@ -53,7 +53,7 @@ container.click = async function(elem)
 				});
 				const { data: decrypted } = await openpgp.decrypt({
 					message: armMessage,
-					passwords: [ containerPasswordInput.value ],
+					passwords: [ (await HMAC(containerPasswordInput.value, SITE_URL)) ],
 				});
 				if (decrypted.isJsonString()) {
 					let NZPGP = JSON.parse(decrypted);
@@ -82,15 +82,16 @@ container.click = async function(elem)
 						if (containerEmailInput.value.length > 0) {
 							if (EMAIL_REGEXP.test(containerEmailInput.value)) {
 								loader.show();
+								passphrase = (await HMAC(containerPasswordInput.value, SITE_URL));
 								const { privateKey, publicKey } = await openpgp.generateKey({
 									type: 'rsa',
 									rsaBits: 4096,
 									userIDs: [{ name: containerNameInput.value, email: containerEmailInput.value }],
-									passphrase: containerPasswordInput.value
+									passphrase: passphrase
 								});
 								localStorage.setItem('publicKey', publicKey);
 								localStorage.setItem('privateKey', privateKey);
-								localStorage.setItem('passphrase', containerPasswordInput.value);
+								localStorage.setItem('passphrase', passphrase);
 								containerNameInput.value = '';
 								containerEmailInput.value = '';
 								containerPasswordInput.value = '';
@@ -98,6 +99,7 @@ container.click = async function(elem)
 								containerInfo.innerHTML = 'Генерация контейнера ...';
 								await container.generate();
 								containerSave.show();
+								containerOff.show();
 								loader.hide();
 							} else {
 								alert('Вы ввели некорректный email!');
