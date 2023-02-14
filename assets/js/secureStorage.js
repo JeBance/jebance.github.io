@@ -2,17 +2,41 @@ class SecureStorage {
 	#publicKey = '';
 	#privateKey = '';
 	#passphrase = '';
-	#fingerprint = '';
+	fingerprint = '';
 
-	constructor(publicKey, privateKey, passphrase) {
+	constructor() {
+	}
+
+	async createStorage(name, email, passphrase) {
+		const { privateKey, publicKey } = await openpgp.generateKey({
+			type: 'rsa',
+			rsaBits: 4096,
+			userIDs: [{ name: name, email: email }],
+			passphrase: passphrase
+		});
 		this.#publicKey = publicKey;
 		this.#privateKey = privateKey;
 		this.#passphrase = passphrase;
-		this.#fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+		this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
 	}
 
-	get fingerprint() {
-		return this.#fingerprint;
+	openStorage(data, passphrase) {
+		const armMessage = await openpgp.readMessage({
+			armoredMessage: data
+		});
+		const { data: decrypted } = await openpgp.decrypt({
+			message: armMessage,
+			passwords: [ passphrase ],
+		});
+		if (decrypted.isJsonString()) {
+			let parseData = JSON.parse(decrypted);
+			this.#publicKey = parseData.publicKey;
+			this.#privateKey = parseData.privateKey;
+			this.#passphrase = passphrase;
+			this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+		} else {
+			alert('Неверный пароль!');
+		}
 	}
 
 	activeAllSecureData() {
@@ -24,7 +48,7 @@ class SecureStorage {
 		this.#publicKey = '';
 		this.#privateKey = '';
 		this.#passphrase = '';
-		this.#fingerprint = '';
+		this.fingerprint = '';
 	}
 
 	async generateSecureFile() {
