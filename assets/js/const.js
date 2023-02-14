@@ -1,4 +1,4 @@
-const VERSION = '0.3.13';
+const VERSION = '0.3.14';
 console.log('VERSION: '+VERSION);
 const API_URL = 'https://api.jebance.ru/';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
@@ -17,13 +17,6 @@ async function HMAC(key, message)
 	c = await crypto.subtle.importKey('raw', k, { name: 'HMAC', hash: 'SHA-512' }, true, ['sign']),
 	s = await crypto.subtle.sign('HMAC', c, m);
 	return btoa(String.fromCharCode(...new Uint8Array(s)))
-}
-
-function checkKeysInLocalStorage()
-{
-	check = false;
-	if (localStorage.getItem('publicKey') && localStorage.getItem('privateKey') && localStorage.getItem('passphrase')) check = true;
-	return check;
 }
 
 let myHub = new Object();

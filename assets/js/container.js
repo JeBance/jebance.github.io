@@ -19,9 +19,7 @@ container.click = async function(elem)
 			break;
 
 		case 'containerOff':
-			localStorage.removeItem('publicKey');
-			localStorage.removeItem('privateKey');
-			localStorage.removeItem('passphrase');
+			container.secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
 			containerElements.hide();
@@ -65,9 +63,7 @@ container.click = async function(elem)
 					let NZPGP = JSON.parse(decrypted);
 					const publicKey = await openpgp.readKey({ armoredKey: NZPGP.publicKey });
 					if (NZPGP.fingerprint == publicKey.getFingerprint()) {
-						localStorage.setItem('publicKey', NZPGP.publicKey);
-						localStorage.setItem('privateKey', NZPGP.privateKey);
-						localStorage.setItem('passphrase', NZPGP.passphrase);
+						container.secureStorage = new SecureStorage(NZPGP.publicKey, NZPGP.privateKey, containerPasswordInput.value);
 						containerPasswordInput.value = '';
 						containerElements.hide();
 						await container.generate();
@@ -97,9 +93,7 @@ container.click = async function(elem)
 									userIDs: [{ name: containerNameInput.value, email: containerEmailInput.value }],
 									passphrase: passphrase
 								});
-								localStorage.setItem('publicKey', publicKey);
-								localStorage.setItem('privateKey', privateKey);
-								localStorage.setItem('passphrase', passphrase);
+								container.secureStorage = new SecureStorage(publicKey, privateKey, passphrase);
 								containerNameInput.value = '';
 								containerEmailInput.value = '';
 								containerPasswordInput.value = '';
@@ -125,19 +119,8 @@ container.click = async function(elem)
 
 container.generate = async function()
 {
-	fingerprint = (await openpgp.readKey({ armoredKey: localStorage.getItem('publicKey') })).getFingerprint();
-	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + fingerprint;
-	let NZPGP = JSON.stringify({
-		publicKey: localStorage.getItem('publicKey'),
-		privateKey: localStorage.getItem('privateKey'),
-		passphrase: localStorage.getItem('passphrase'),
-		fingerprint: fingerprint
-	});
-	const encrypted = await openpgp.encrypt({
-		message: await openpgp.createMessage({ text: NZPGP }),
-		passwords: [ localStorage.getItem('passphrase') ],
-		config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
-	});
-	downloadNZPGPhref.setAttribute('href', 'data:application/pgp-encrypted,' + encodeURIComponent(encrypted));
-	downloadNZPGPhref.setAttribute('download', fingerprint + '.nz');
+	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + container.secureStorage.fingerprint;
+	let fileHref = container.secureStorage.generateSecureFile;
+	downloadNZPGPhref.setAttribute('href', fileHref);
+	downloadNZPGPhref.setAttribute('download', container.secureStorage.fingerprint + '.nz');
 }

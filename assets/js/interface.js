@@ -19,7 +19,7 @@ async function wrap(elem)
 		case 'menuButtonSettings':
 			file.value = null;
 			containerElements.hide();
-			if (localStorage.getItem('publicKey') && localStorage.getItem('privateKey') && localStorage.getItem('passphrase')) {
+			if (activeAllSecureData()) {
 				await container.generate();
 				containerSave.show();
 				containerOff.show();
