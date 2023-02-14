@@ -59,7 +59,7 @@ container.click = async function(elem)
 				});
 				const { data: decrypted } = await openpgp.decrypt({
 					message: armMessage,
-					passwords: [ (await HMAC(containerPasswordInput.value, SITE_URL)) ],
+					passwords: [ containerPasswordInput.value ],
 				});
 				if (decrypted.isJsonString()) {
 					let NZPGP = JSON.parse(decrypted);
@@ -90,8 +90,7 @@ container.click = async function(elem)
 						if (containerEmailInput.value.length > 0) {
 							if (EMAIL_REGEXP.test(containerEmailInput.value)) {
 								loader.show();
-								passphrase = (await HMAC(containerPasswordInput.value, SITE_URL));
-								//HMAC(containerPasswordInput.value, SITE_URL).then(e => console.log(e))
+								passphrase = containerPasswordInput.value;
 								const { privateKey, publicKey } = await openpgp.generateKey({
 									type: 'rsa',
 									rsaBits: 4096,
