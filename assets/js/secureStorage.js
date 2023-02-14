@@ -4,9 +4,6 @@ class SecureStorage {
 	#passphrase = '';
 	fingerprint = '';
 
-	constructor() {
-	}
-
 	async createStorage(name, email, passphrase) {
 		const { privateKey, publicKey } = await openpgp.generateKey({
 			type: 'rsa',
@@ -79,3 +76,5 @@ class SecureStorage {
 		return encrypted;
 	}
 }
+
+secureStorage = new SecureStorage();

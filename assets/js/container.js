@@ -19,7 +19,7 @@ container.click = async function(elem)
 			break;
 
 		case 'containerOff':
-			container.secureStorage.eraseAllSecureData();
+			secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
 			containerElements.hide();
@@ -52,9 +52,8 @@ container.click = async function(elem)
 		case 'containerPasswordAccept':
 			if (containerPasswordInput.value.length < 8) alert('Короткий пароль!');
 			if (file.data) {
-				container.secureStorage = new SecureStorage();
-				await container.secureStorage.openStorage(file.data, containerPasswordInput.value);
-				if (container.secureStorage.activeAllSecureData()) {
+				await secureStorage.openStorage(file.data, containerPasswordInput.value);
+				if (secureStorage.activeAllSecureData()) {
 					containerPasswordInput.value = '';
 					containerElements.hide();
 					await container.generate();
@@ -72,9 +71,8 @@ container.click = async function(elem)
 				&& (containerEmailInput.value.length > 0)) {
 					if (EMAIL_REGEXP.test(containerEmailInput.value)) {
 						loader.show();
-						container.secureStorage = new SecureStorage();
-						await container.secureStorage.createStorage(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value);
-						if (container.secureStorage.activeAllSecureData()) {
+						await secureStorage.createStorage(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value);
+						if (secureStorage.activeAllSecureData()) {
 							containerNameInput.value = '';
 							containerEmailInput.value = '';
 							containerPasswordInput.value = '';
@@ -99,8 +97,8 @@ container.click = async function(elem)
 
 container.generate = async function()
 {
-	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + container.secureStorage.fingerprint;
-	let fileHref = container.secureStorage.generateSecureFile;
+	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + secureStorage.fingerprint;
+	let fileHref = secureStorage.generateSecureFile;
 	downloadNZPGPhref.setAttribute('href', fileHref);
-	downloadNZPGPhref.setAttribute('download', container.secureStorage.fingerprint + '.nz');
+	downloadNZPGPhref.setAttribute('download', secureStorage.fingerprint + '.nz');
 }
