@@ -19,7 +19,7 @@ async function wrap(elem)
 		case 'menuButtonSettings':
 			file.value = null;
 			containerElements.hide();
-			if (activeAllSecureData()) {
+			if (secureStorage.activeAllSecureData()) {
 				await container.generate();
 				containerSave.show();
 				containerOff.show();
