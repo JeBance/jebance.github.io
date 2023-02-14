@@ -25,6 +25,15 @@ myHub.publicKey = null;
 
 myHub.xhr = async function(post = new Object({request:'ping'}))
 {
+	if (myHub.publicKey == null) {
+		myHub.xhr({request:'getServerPublicKey'})
+			.then((value) => {
+				result = new Object(value);
+				if (result.result == 'ok') myHub.publicKey = result.serverPublicKey;
+			})
+			.catch((error) => console.error(`${error}`));
+	}
+
 	if ((post.request != 'ping') && (post.request != 'getServerPublicKey') && (secureStorage.activeAllSecureData()))
 	post.request = await secureStorage.encryptMessage(myHub.publicKey, post.request);
 
