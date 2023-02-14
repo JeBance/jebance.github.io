@@ -77,4 +77,4 @@ class SecureStorage {
 	}
 }
 
-secureStorage = new SecureStorage();
+let secureStorage = new SecureStorage();
