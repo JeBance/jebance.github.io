@@ -30,7 +30,7 @@ class SecureStorage {
 			this.#publicKey = parseData.publicKey;
 			this.#privateKey = parseData.privateKey;
 			this.#passphrase = passphrase;
-			this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+			this.fingerprint = (await openpgp.readKey({ armoredKey: parseData.publicKey })).getFingerprint();
 		} else {
 			alert('Неверный пароль!');
 		}
