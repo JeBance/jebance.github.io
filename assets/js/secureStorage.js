@@ -37,6 +37,7 @@ class SecureStorage {
 	}
 
 	activeAllSecureData() {
+		let check = false;
 		((this.#publicKey) && (this.#privateKey) && (this.#passphrase)) ? check = true : check = false;
 		return check;
 	}
