@@ -1,7 +1,8 @@
-const VERSION = '0.3.12';
+const VERSION = '0.3.13';
 console.log('VERSION: '+VERSION);
-const API_URL = 'https://jebance.ru/api.php';
+const API_URL = 'https://api.jebance.ru/';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
+
 const containerElements = document.getElementsByName("container");
 
 containerElements.hide = function() {
@@ -16,6 +17,62 @@ async function HMAC(key, message)
 	c = await crypto.subtle.importKey('raw', k, { name: 'HMAC', hash: 'SHA-512' }, true, ['sign']),
 	s = await crypto.subtle.sign('HMAC', c, m);
 	return btoa(String.fromCharCode(...new Uint8Array(s)))
+}
+
+function checkKeysInLocalStorage()
+{
+	check = false;
+	if (localStorage.getItem('publicKey') && localStorage.getItem('privateKey') && localStorage.getItem('passphrase')) check = true;
+	return check;
+}
+
+let myHub = new Object();
+myHub.address = API_URL;
+myHub.publicKey = null;
+
+myHub.xhr = async function(post = new Object({request:'ping'}))
+{
+	if ((post.request != 'ping') && (post.request != 'getServerPublicKey')) {
+		let privateKeyArmored = localStorage.getItem('privateKey');
+		let passphrase = localStorage.getItem('passphrase');
+		const publicKey = await openpgp.readKey({ armoredKey: myHub.publicKey });
+		const privateKey = await openpgp.decryptKey({
+			privateKey: await openpgp.readPrivateKey({ armoredKey: privateKeyArmored }),
+			passphrase
+		});
+		const encrypted = await openpgp.encrypt({
+			message: await openpgp.createMessage({ text: post.request }),
+			encryptionKeys: publicKey,
+			signingKeys: privateKey
+		});
+		post.request = encrypted;
+	}
+	let post_data = (new URLSearchParams(post)).toString();
+	return new Promise((resolve, reject) => {
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', myHub.address);
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.responseType = 'json';
+		xhr.send(post_data);
+		xhr.onload = (event) => {
+			if (xhr.status != 200) {
+				reject(`Error ${xhr.status}: ${xhr.statusText}`);
+			} else {
+				console.log(`Done! Received ${event.loaded} bytes`);
+				resolve(xhr.response);
+			}
+		}
+		xhr.onerror = () => {
+			reject('Error!');
+		}
+		xhr.onprogress = (event) => {
+			if (event.lengthComputable) {
+				console.log(`Received ${event.loaded} of ${event.total} bytes`);
+			} else {
+				console.log(`Received ${event.loaded} bytes`);
+			}
+		};
+	});
 }
 
 String.prototype.isJsonString = function()
@@ -53,4 +110,3 @@ Object.prototype.correct = async function()
 	await sleep(100);
 	this.classList.toggle('green');
 }
-
