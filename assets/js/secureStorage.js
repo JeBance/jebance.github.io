@@ -63,10 +63,11 @@ class SecureStorage {
 	}
 	
 	async encryptMessage(recipientPublicKey, message) {
+		passphrase = this.#passphrase;
 		const publicKey = await openpgp.readKey({ armoredKey: recipientPublicKey });
 		const privateKey = await openpgp.decryptKey({
 			privateKey: await openpgp.readPrivateKey({ armoredKey: this.#privateKey }),
-			this.#passphrase
+			passphrase
 		});
 		const encrypted = await openpgp.encrypt({
 			message: await openpgp.createMessage({ text: message }),
