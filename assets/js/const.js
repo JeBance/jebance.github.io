@@ -25,21 +25,9 @@ myHub.publicKey = null;
 
 myHub.xhr = async function(post = new Object({request:'ping'}))
 {
-	if ((post.request != 'ping') && (post.request != 'getServerPublicKey')) {
-		let privateKeyArmored = localStorage.getItem('privateKey');
-		let passphrase = localStorage.getItem('passphrase');
-		const publicKey = await openpgp.readKey({ armoredKey: myHub.publicKey });
-		const privateKey = await openpgp.decryptKey({
-			privateKey: await openpgp.readPrivateKey({ armoredKey: privateKeyArmored }),
-			passphrase
-		});
-		const encrypted = await openpgp.encrypt({
-			message: await openpgp.createMessage({ text: post.request }),
-			encryptionKeys: publicKey,
-			signingKeys: privateKey
-		});
-		post.request = encrypted;
-	}
+	if ((post.request != 'ping') && (post.request != 'getServerPublicKey') && (container.secureStorage.activeAllSecureData()))
+	post.request = await container.secureStorage.encryptMessage(myHub.publicKey, post.request);
+
 	let post_data = (new URLSearchParams(post)).toString();
 	return new Promise((resolve, reject) => {
 		let xhr = new XMLHttpRequest();

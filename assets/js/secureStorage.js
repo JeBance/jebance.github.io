@@ -20,7 +20,7 @@ class SecureStorage {
 		this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
 	}
 
-	openStorage(data, passphrase) {
+	async openStorage(data, passphrase) {
 		const armMessage = await openpgp.readMessage({
 			armoredMessage: data
 		});
@@ -63,5 +63,19 @@ class SecureStorage {
 		});
 		let fileHref = 'data:application/pgp-encrypted,' + encodeURIComponent(encrypted);
 		return fileHref;
+	}
+	
+	async encryptMessage(recipientPublicKey, message) {
+		const publicKey = await openpgp.readKey({ armoredKey: recipientPublicKey });
+		const privateKey = await openpgp.decryptKey({
+			privateKey: await openpgp.readPrivateKey({ armoredKey: this.#privateKey }),
+			this.#passphrase
+		});
+		const encrypted = await openpgp.encrypt({
+			message: await openpgp.createMessage({ text: message }),
+			encryptionKeys: this.#publicKey,
+			signingKeys: this.#privateKey
+		});
+		return encrypted;
 	}
 }
