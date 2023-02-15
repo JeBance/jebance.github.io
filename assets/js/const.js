@@ -23,15 +23,6 @@ let myHub = new Object();
 myHub.address = API_URL;
 myHub.publicKey = null;
 
-if (myHub.publicKey == null) {
-	myHub.xhr({request:'getServerPublicKey'})
-		.then((value) => {
-			result = new Object(value);
-			if (result.result == 'ok') myHub.publicKey = result.serverPublicKey;
-		})
-		.catch((error) => console.error(`${error}`));
-}
-
 myHub.xhr = async function(post = new Object({request:'ping'}))
 {
 	if ((post.request != 'ping') && (post.request != 'getServerPublicKey') && (secureStorage.activeAllSecureData()))
@@ -63,6 +54,15 @@ myHub.xhr = async function(post = new Object({request:'ping'}))
 			}
 		};
 	});
+}
+
+if (myHub.publicKey == null) {
+	myHub.xhr({request:'getServerPublicKey'})
+		.then((value) => {
+			result = new Object(value);
+			if (result.result == 'ok') myHub.publicKey = result.serverPublicKey;
+		})
+		.catch((error) => console.error(`${error}`));
 }
 
 String.prototype.isJsonString = function()
