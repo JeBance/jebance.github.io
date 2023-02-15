@@ -5,34 +5,46 @@ class SecureStorage {
 	fingerprint = '';
 
 	async createStorage(name, email, passphrase) {
-		const { privateKey, publicKey } = await openpgp.generateKey({
-			type: 'rsa',
-			rsaBits: 4096,
-			userIDs: [{ name: name, email: email }],
-			passphrase: passphrase
-		});
-		this.#publicKey = publicKey;
-		this.#privateKey = privateKey;
-		this.#passphrase = passphrase;
-		this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+		try {
+			const { privateKey, publicKey } = await openpgp.generateKey({
+				type: 'rsa',
+				rsaBits: 4096,
+				userIDs: [{ name: name, email: email }],
+				passphrase: passphrase
+			});
+			this.#publicKey = publicKey;
+			this.#privateKey = privateKey;
+			this.#passphrase = passphrase;
+			this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+		} catch(e) {
+			alert('Не удалось сгенерировать контейнер!');
+		}
 	}
 
 	async openStorage(data, passphrase) {
-		const armMessage = await openpgp.readMessage({
-			armoredMessage: data
-		});
-		const { data: decrypted } = await openpgp.decrypt({
-			message: armMessage,
-			passwords: [ passphrase ],
-		});
-		if (decrypted.isJsonString()) {
-			let parseData = JSON.parse(decrypted);
-			this.#publicKey = parseData.publicKey;
-			this.#privateKey = parseData.privateKey;
-			this.#passphrase = passphrase;
-			this.fingerprint = (await openpgp.readKey({ armoredKey: parseData.publicKey })).getFingerprint();
-		} else {
-			alert('Неверный пароль!');
+		try {
+			const armMessage = await openpgp.readMessage({
+				armoredMessage: data
+			});
+			try {
+				const { data: decrypted } = await openpgp.decrypt({
+					message: armMessage,
+					passwords: [ passphrase ],
+				});
+				if (decrypted.isJsonString()) {
+					let parseData = JSON.parse(decrypted);
+					this.#publicKey = parseData.publicKey;
+					this.#privateKey = parseData.privateKey;
+					this.#passphrase = passphrase;
+					this.fingerprint = (await openpgp.readKey({ armoredKey: parseData.publicKey })).getFingerprint();
+				} else {
+					alert('Контейнер повреждён!');
+				}
+			} catch(e) {
+				alert('Неверный пароль!');
+			}
+		} catch(e) {
+			alert('Файл не является защищённым хранилищем ключей!');
 		}
 	}
 

@@ -98,7 +98,7 @@ container.click = async function(elem)
 container.generate = async function()
 {
 	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + secureStorage.fingerprint;
-	let fileHref = secureStorage.generateSecureFile;
+	let fileHref = await secureStorage.generateSecureFile();
 	downloadNZPGPhref.setAttribute('href', fileHref);
 	downloadNZPGPhref.setAttribute('download', secureStorage.fingerprint + '.nz');
 }
