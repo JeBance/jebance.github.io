@@ -138,6 +138,36 @@ class SecureStorage {
 		}
 		return false;
 	}
+
+	async decryptMessage(encrypted) {
+		try {
+			const message = await openpgp.readMessage({ armoredMessage: encrypted });
+			try {
+				const { data: decrypted, signatures } = await openpgp.decrypt({
+					message,
+					verificationKeys: this.#publicKey,
+					decryptionKeys: this.#privateKey
+				});
+				console.log('decrypted' + decrypted);
+				console.log('signatures' + signatures);
+				try {
+					await signatures[0].verified;
+					let decodedJSON = JSON.parse(decrypted);
+					return decodedJSON;
+				} catch (e) {
+					//throw new Error('Signature could not be verified: ' + e.message);
+					console.error('Signature could not be verified: ' + e.message);
+					return false;
+				}
+			} catch(e) {
+				console.log(e);
+				return false;
+			}
+		} catch(e) {
+			console.log(e);
+			return false;
+		}
+	}
 }
 
 let secureStorage = new SecureStorage();
