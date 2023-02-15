@@ -36,12 +36,16 @@ container.click = async function(elem)
 				if (x.name.substring(x.name.length - 3) == '.nz') {
 					file.x = x;
 					file.data = reader.result;
-					container.elements.hide();
-					containerInfo.innerHTML = 'Введите пароль для дешифровки контейнера.';
-					containerPasswordInput.show();
-					containerPasswordAccept.show();
+					secureStorage.checkStorage(file.data).then((value) => {
+						if (value == true) {
+							container.elements.hide();
+							containerInfo.innerHTML = 'Введите пароль для дешифровки контейнера.';
+							containerPasswordInput.show();
+							containerPasswordAccept.show();
+						}
+					})
 				} else {
-					alert('Некорректный файл. Выберите файл контейнера с расширением .nz');
+					alert(`Некорректный файл!\nВыберите файл контейнера с расширением .nz`);
 				}
 			};
 			reader.onerror = function() {

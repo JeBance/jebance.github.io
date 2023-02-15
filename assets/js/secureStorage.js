@@ -21,6 +21,19 @@ class SecureStorage {
 		}
 	}
 
+	async checkStorage(data) {
+		let check = false;
+		try {
+			const armMessage = await openpgp.readMessage({
+				armoredMessage: data
+			});
+			check = true;
+		} catch(e) {
+			alert('Файл не является защищённым хранилищем ключей!');
+		}
+		return new Promise((resolve, reject) => { resolve(check) });
+	}
+
 	async openStorage(data, passphrase) {
 		try {
 			const armMessage = await openpgp.readMessage({
