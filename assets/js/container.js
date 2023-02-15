@@ -37,6 +37,7 @@ container.click = async function(elem)
 							container.elements.hide();
 							containerInfo.innerHTML = 'Введите пароль для дешифровки контейнера.';
 							containerPasswordInput.show();
+							containerPasswordInput.focus();
 							containerPasswordAccept.show();
 						}
 					})

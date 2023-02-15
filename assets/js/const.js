@@ -21,33 +21,34 @@ myHub.xhr = async function(post = new Object({request:'ping'}))
 {
 	if ((post.request != 'ping') && (post.request != 'getServerPublicKey') && (secureStorage.activeAllSecureData()))
 	post.request = await secureStorage.encryptMessage(myHub.publicKey, post.request);
-
-	let post_data = (new URLSearchParams(post)).toString();
-	return new Promise((resolve, reject) => {
-		let xhr = new XMLHttpRequest();
-		xhr.open('POST', myHub.address);
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.responseType = 'json';
-		xhr.send(post_data);
-		xhr.onload = (event) => {
-			if (xhr.status != 200) {
-				reject(`Error ${xhr.status}: ${xhr.statusText}`);
-			} else {
-				console.log(`Done! Received ${event.loaded} bytes`);
-				resolve(xhr.response);
+	if (post.request !== false) {
+		let post_data = (new URLSearchParams(post)).toString();
+		return new Promise((resolve, reject) => {
+			let xhr = new XMLHttpRequest();
+			xhr.open('POST', myHub.address);
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.responseType = 'json';
+			xhr.send(post_data);
+			xhr.onload = (event) => {
+				if (xhr.status != 200) {
+					reject(`Error ${xhr.status}: ${xhr.statusText}`);
+				} else {
+					console.log(`Done! Received ${event.loaded} bytes`);
+					resolve(xhr.response);
+				}
 			}
-		}
-		xhr.onerror = () => {
-			reject('Error!');
-		}
-		xhr.onprogress = (event) => {
-			if (event.lengthComputable) {
-				console.log(`Received ${event.loaded} of ${event.total} bytes`);
-			} else {
-				console.log(`Received ${event.loaded} bytes`);
+			xhr.onerror = () => {
+				reject('Error!');
 			}
-		};
-	});
+			xhr.onprogress = (event) => {
+				if (event.lengthComputable) {
+					console.log(`Received ${event.loaded} of ${event.total} bytes`);
+				} else {
+					console.log(`Received ${event.loaded} bytes`);
+				}
+			};
+		});
+	}
 }
 
 if (myHub.publicKey == null) {
