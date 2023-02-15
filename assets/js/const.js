@@ -3,12 +3,6 @@ console.log('VERSION: '+VERSION);
 const API_URL = 'https://api.jebance.ru/';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;
 
-const containerElements = document.getElementsByName("container");
-
-containerElements.hide = function() {
-	for (let i = 0, l = containerElements.length; i < l; i++) containerElements[i].hide();
-}
-
 async function HMAC(key, message)
 {
 	const g = str => new Uint8Array([...unescape(encodeURIComponent(str))].map(c => c.charCodeAt(0))),

@@ -7,7 +7,7 @@ container.click = async function(elem)
 
 		case 'containerCreate':
 			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
-			containerElements.hide();
+			container.elements.hide();
 			containerNameInput.show('selectable');
 			containerEmailInput.show('selectable');
 			containerPasswordInput.show('selectable');
@@ -22,7 +22,7 @@ container.click = async function(elem)
 			secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
-			containerElements.hide();
+			container.elements.hide();
 			containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
 			containerBrowse.show();
 			containerCreate.show();
@@ -33,10 +33,10 @@ container.click = async function(elem)
 			let reader = new FileReader();
 			reader.readAsText(x);
 			reader.onload = function() {
-				if (x.name.substring(x.name.length - 3)) {
+				if (x.name.substring(x.name.length - 3) == '.nz') {
 					file.x = x;
 					file.data = reader.result;
-					containerElements.hide();
+					container.elements.hide();
 					containerInfo.innerHTML = 'Введите пароль для дешифровки контейнера.';
 					containerPasswordInput.show();
 					containerPasswordAccept.show();
@@ -54,8 +54,8 @@ container.click = async function(elem)
 			if (file.data) {
 				await secureStorage.openStorage(file.data, containerPasswordInput.value);
 				if (secureStorage.activeAllSecureData()) {
-					containerPasswordInput.value = '';
-					containerElements.hide();
+					container.clearInputs();
+					container.elements.hide();
 					await container.generate();
 					containerSave.show();
 					containerOff.show();
@@ -73,10 +73,8 @@ container.click = async function(elem)
 						loader.show();
 						await secureStorage.createStorage(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value);
 						if (secureStorage.activeAllSecureData()) {
-							containerNameInput.value = '';
-							containerEmailInput.value = '';
-							containerPasswordInput.value = '';
-							containerElements.hide();
+							container.clearInputs();
+							container.elements.hide();
 							containerInfo.innerHTML = 'Генерация контейнера ...';
 							await container.generate();
 							containerSave.show();
@@ -93,6 +91,19 @@ container.click = async function(elem)
 		default:
 			break;
 	}
+}
+
+container.elements = document.getElementsByName("container");
+
+container.elements.hide = function() {
+	for (let i = 0, l = container.elements.length; i < l; i++) container.elements[i].hide();
+}
+
+container.clearInputs = function()
+{
+	containerNameInput.value = '';
+	containerEmailInput.value = '';
+	containerPasswordInput.value = '';
 }
 
 container.generate = async function()
