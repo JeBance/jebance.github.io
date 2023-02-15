@@ -6,7 +6,7 @@ container.click = async function(elem)
 			break;
 
 		case 'containerCreate':
-			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
+			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP-ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
 			container.elements.hide();
 			containerNameInput.show('selectable');
 			containerEmailInput.show('selectable');
@@ -22,10 +22,7 @@ container.click = async function(elem)
 			secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
-			container.elements.hide();
-			containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
-			containerBrowse.show();
-			containerCreate.show();
+			container.choice();
 			break;
 
 		case 'file':
@@ -34,7 +31,6 @@ container.click = async function(elem)
 			reader.readAsText(x);
 			reader.onload = function() {
 				if (x.name.substring(x.name.length - 3) == '.nz') {
-					file.x = x;
 					file.data = reader.result;
 					secureStorage.checkStorage(file.data).then((value) => {
 						if (value == true) {
@@ -54,39 +50,30 @@ container.click = async function(elem)
 			break;
 
 		case 'containerPasswordAccept':
-			if (containerPasswordInput.value.length < 8) alert('Короткий пароль!');
-			if (file.data) {
-				await secureStorage.openStorage(file.data, containerPasswordInput.value);
-				if (secureStorage.activeAllSecureData()) {
-					container.clearInputs();
-					container.elements.hide();
-					await container.generate();
-					containerSave.show();
-					containerOff.show();
-					file.value = null;
-					file.data = null;
-					file.x = null;
-				}
+			if (containerPasswordInput.value.length < 8) {
+				alert('Короткий пароль!');
 			} else {
-				if (containerNameInput.value.length == 0) alert('Введите никнейм!');
-				if (containerEmailInput.value.length == 0) alert('Введите email!');
-				if ((containerPasswordInput.value.length > 7)
-				&& (containerNameInput.value.length > 0)
-				&& (containerEmailInput.value.length > 0)) {
-					if (EMAIL_REGEXP.test(containerEmailInput.value)) {
-						loader.show();
-						await secureStorage.createStorage(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value);
-						if (secureStorage.activeAllSecureData()) {
-							container.clearInputs();
-							container.elements.hide();
-							containerInfo.innerHTML = 'Генерация контейнера ...';
-							await container.generate();
-							containerSave.show();
-							containerOff.show();
+				if (file.data) {
+					await secureStorage.openStorage(file.data, containerPasswordInput.value);
+					if (secureStorage.activeAllSecureData() == true) await container.generate();
+				} else {
+					if (containerNameInput.value.length == 0) alert('Введите никнейм!');
+					if (containerEmailInput.value.length == 0) alert('Введите email!');
+					if ((containerPasswordInput.value.length > 7)
+					&& (containerNameInput.value.length > 0)
+					&& (containerEmailInput.value.length > 0)) {
+						if (EMAIL_REGEXP.test(containerEmailInput.value)) {
+							loader.show();
+							try {
+								await secureStorage.createStorage(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value);
+								if (secureStorage.activeAllSecureData() == true) await container.generate();
+							} catch(e) {
+								console.error(e);
+							}
+							loader.hide();
+						} else {
+							alert('Вы ввели некорректный email!');
 						}
-						loader.hide();
-					} else {
-						alert('Вы ввели некорректный email!');
 					}
 				}
 			}
@@ -105,15 +92,31 @@ container.elements.hide = function() {
 
 container.clearInputs = function()
 {
+	file.data = null;
+	file.value = null;
 	containerNameInput.value = '';
 	containerEmailInput.value = '';
 	containerPasswordInput.value = '';
 }
 
+container.choice = function()
+{
+	container.clearInputs();
+	container.elements.hide();
+	containerInfo.innerHTML = 'Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.';
+	containerBrowse.show();
+	containerCreate.show();
+}
+
 container.generate = async function()
 {
-	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + secureStorage.fingerprint;
+	container.clearInputs();
+	container.elements.hide();
+	containerInfo.innerHTML = 'Генерация контейнера ...';
 	let fileHref = await secureStorage.generateSecureFile();
 	downloadNZPGPhref.setAttribute('href', fileHref);
 	downloadNZPGPhref.setAttribute('download', secureStorage.fingerprint + '.nz');
+	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + secureStorage.fingerprint;
+	containerSave.show();
+	containerOff.show();
 }

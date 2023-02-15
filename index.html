@@ -65,8 +65,8 @@
 							<p id="containerInfo">Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.</p>
 							<button id="containerBrowse" onclick="container.click(this)" class="hide" name="container">Подключить</button>
 							<button id="containerCreate" onclick="container.click(this)" class="hide" name="container">Создать</button>
-							<input id="containerNameInput" type="text" placeholder="Никнейм" class="hide selectable" name="container">
-							<input id="containerEmailInput" type="email" placeholder="E-mail" class="hide selectable" name="container">
+							<input id="containerNameInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="text" placeholder="Никнейм" class="hide selectable" name="container">
+							<input id="containerEmailInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="email" placeholder="E-mail" class="hide selectable" name="container">
 							<input id="containerPasswordInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="password" placeholder="Пароль" class="hide selectable" name="container">
 							<button id="containerPasswordAccept" onclick="container.click(this)" class="hide" name="container">Подтвердить</button>
 							<button id="containerSave" onclick="container.click(this)" class="hide" name="container">Сохранить</button>
