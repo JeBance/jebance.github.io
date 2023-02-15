@@ -89,18 +89,31 @@ class SecureStorage {
 	}
 	
 	async encryptMessage(recipientPublicKey, message) {
-		passphrase = this.#passphrase;
-		const publicKey = await openpgp.readKey({ armoredKey: recipientPublicKey });
-		const privateKey = await openpgp.decryptKey({
-			privateKey: await openpgp.readPrivateKey({ armoredKey: this.#privateKey }),
-			passphrase
-		});
-		const encrypted = await openpgp.encrypt({
-			message: await openpgp.createMessage({ text: message }),
-			encryptionKeys: this.#publicKey,
-			signingKeys: this.#privateKey
-		});
-		return encrypted;
+		let passphrase = this.#passphrase;
+		try {
+			const publicKey = await openpgp.readKey({ armoredKey: recipientPublicKey });
+			try {
+				const privateKey = await openpgp.decryptKey({
+					privateKey: await openpgp.readPrivateKey({ armoredKey: this.#privateKey }),
+					passphrase
+				});
+				try {
+					const encrypted = await openpgp.encrypt({
+						message: await openpgp.createMessage({ text: message }),
+						encryptionKeys: publicKey,
+						signingKeys: privateKey
+					});
+					return encrypted;
+				} catch(e) {
+					alert('Не удалось зашифровать запрос к серверу!');
+				}
+			} catch(e) {
+				alert('Не удалось прочитать приватный ключ из хранилища ключей!');
+			}
+		} catch(e) {
+			alert('Не удалось прочитать публичный ключ сервера!');
+		}
+		return false;
 	}
 }
 
