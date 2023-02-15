@@ -119,6 +119,10 @@ container.generate = async function()
 	downloadNZPGPhref.setAttribute('href', fileHref);
 	downloadNZPGPhref.setAttribute('download', secureStorage.fingerprint + '.nz');
 	containerInfo.innerHTML = '<b>Отпечаток:</b> ' + secureStorage.fingerprint;
+	containerNickname.innerHTML = '<b>Никнейм:</b> ' + secureStorage.nickname;
+	containerEmail.innerHTML = '<b>E-mail:</b> ' + secureStorage.email;
+	containerNickname.show();
+	containerEmail.show();
 	containerSave.show();
 	containerOff.show();
 }

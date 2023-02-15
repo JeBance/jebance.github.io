@@ -5,6 +5,8 @@ class SecureStorage {
 	#privateArmoredKey = '';
 	#passphrase = '';
 	fingerprint = '';
+	nickname = '';
+	email = '';
 
 	async createStorage(name, email, passphrase) {
 		try {
@@ -23,8 +25,9 @@ class SecureStorage {
 			this.#privateArmoredKey = privateKey;
 			this.#passphrase = passphrase;
 			this.fingerprint = this.#publicKey.getFingerprint();
+			this.nickname = this.#publicKey.users[0].userID.name;
+			this.email = this.#publicKey.users[0].userID.email;
 		} catch(e) {
-			console.log(e);
 			alert('Не удалось сгенерировать контейнер!');
 		}
 	}
@@ -56,33 +59,30 @@ class SecureStorage {
 					let parseData = JSON.parse(decrypted);
 					try {
 						this.#publicKey = await openpgp.readKey({ armoredKey: parseData.publicKey });
+						this.fingerprint = this.#publicKey.getFingerprint();
+						this.nickname = this.#publicKey.users[0].userID.name;
+						this.email = this.#publicKey.users[0].userID.email;
 						try {
 							this.#privateKey = await openpgp.decryptKey({
 								privateKey: await openpgp.readPrivateKey({ armoredKey: parseData.privateKey }),
 								passphrase
 							});
 						} catch(e) {
-							console.log(e);
 							alert('Не удалось прочитать приватный ключ из хранилища ключей!');
 						}
 					} catch(e) {
-						console.log(e);
 						alert('Не удалось прочитать публичный ключ из хранилища ключей!');
 					}
 					this.#publicArmoredKey = parseData.publicKey;
 					this.#privateArmoredKey = parseData.privateKey;
 					this.#passphrase = passphrase;
-					this.fingerprint = this.#publicKey.getFingerprint();
 				} else {
-					console.log(e);
 					alert('Контейнер повреждён!');
 				}
 			} catch(e) {
-				console.log(e);
 				alert('Неверный пароль!');
 			}
 		} catch(e) {
-			console.log(e);
 			alert('Файл не является защищённым хранилищем ключей!');
 		}
 	}
