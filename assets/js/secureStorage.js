@@ -1,6 +1,8 @@
 class SecureStorage {
 	#publicKey = '';
 	#privateKey = '';
+	#publicArmoredKey = '';
+	#privateArmoredKey = '';
 	#passphrase = '';
 	fingerprint = '';
 
@@ -12,11 +14,17 @@ class SecureStorage {
 				userIDs: [{ name: name, email: email }],
 				passphrase: passphrase
 			});
-			this.#publicKey = publicKey;
-			this.#privateKey = privateKey;
+			this.#publicKey = await openpgp.readKey({ armoredKey: publicKey });
+			this.#privateKey = await openpgp.decryptKey({
+				privateKey: await openpgp.readPrivateKey({ armoredKey: privateKey }),
+				passphrase
+			});
+			this.#publicArmoredKey = publicKey;
+			this.#privateArmoredKey = privateKey;
 			this.#passphrase = passphrase;
-			this.fingerprint = (await openpgp.readKey({ armoredKey: publicKey })).getFingerprint();
+			this.fingerprint = this.#publicKey.getFingerprint();
 		} catch(e) {
+			console.log(e);
 			alert('Не удалось сгенерировать контейнер!');
 		}
 	}
@@ -46,38 +54,60 @@ class SecureStorage {
 				});
 				if (decrypted.isJsonString()) {
 					let parseData = JSON.parse(decrypted);
-					this.#publicKey = parseData.publicKey;
-					this.#privateKey = parseData.privateKey;
+					try {
+						this.#publicKey = await openpgp.readKey({ armoredKey: parseData.publicKey });
+						try {
+							this.#privateKey = await openpgp.decryptKey({
+								privateKey: await openpgp.readPrivateKey({ armoredKey: parseData.privateKey }),
+								passphrase
+							});
+						} catch(e) {
+							console.log(e);
+							alert('Не удалось прочитать приватный ключ из хранилища ключей!');
+						}
+					} catch(e) {
+						console.log(e);
+						alert('Не удалось прочитать публичный ключ из хранилища ключей!');
+					}
+					this.#publicArmoredKey = parseData.publicKey;
+					this.#privateArmoredKey = parseData.privateKey;
 					this.#passphrase = passphrase;
-					this.fingerprint = (await openpgp.readKey({ armoredKey: parseData.publicKey })).getFingerprint();
+					this.fingerprint = this.#publicKey.getFingerprint();
 				} else {
+					console.log(e);
 					alert('Контейнер повреждён!');
 				}
 			} catch(e) {
+				console.log(e);
 				alert('Неверный пароль!');
 			}
 		} catch(e) {
+			console.log(e);
 			alert('Файл не является защищённым хранилищем ключей!');
 		}
 	}
 
 	activeAllSecureData() {
 		let check = false;
-		((this.#publicKey) && (this.#privateKey) && (this.#passphrase)) ? check = true : check = false;
+		((this.#publicKey)
+		&& (this.#privateKey)
+		&& (this.#publicArmoredKey)
+		&& (this.#privateArmoredKey)
+		&& (this.#passphrase)) ? check = true : check = false;
 		return check;
 	}
 
 	eraseAllSecureData() {
-		this.#publicKey = '';
-		this.#privateKey = '';
+		this.#publicArmoredKey = '';
+		this.#privateArmoredKey = '';
 		this.#passphrase = '';
 		this.fingerprint = '';
 	}
 
 	async generateSecureFile() {
 		let string = JSON.stringify({
-			publicKey: this.#publicKey,
-			privateKey: this.#privateKey
+			publicKey: this.#publicArmoredKey,
+			privateKey: this.#privateArmoredKey
 		});
 		let encrypted = await openpgp.encrypt({
 			message: await openpgp.createMessage({ text: string }),
@@ -92,23 +122,16 @@ class SecureStorage {
 		let passphrase = this.#passphrase;
 		try {
 			const publicKey = await openpgp.readKey({ armoredKey: recipientPublicKey });
+			const privateKey = this.#privateKey;
 			try {
-				const privateKey = await openpgp.decryptKey({
-					privateKey: await openpgp.readPrivateKey({ armoredKey: this.#privateKey }),
-					passphrase
+				const encrypted = await openpgp.encrypt({
+					message: await openpgp.createMessage({ text: message }),
+					encryptionKeys: publicKey,
+					signingKeys: privateKey
 				});
-				try {
-					const encrypted = await openpgp.encrypt({
-						message: await openpgp.createMessage({ text: message }),
-						encryptionKeys: publicKey,
-						signingKeys: privateKey
-					});
-					return encrypted;
-				} catch(e) {
-					alert('Не удалось зашифровать запрос к серверу!');
-				}
+				return encrypted;
 			} catch(e) {
-				alert('Не удалось прочитать приватный ключ из хранилища ключей!');
+				alert('Не удалось зашифровать запрос к серверу!');
 			}
 		} catch(e) {
 			alert('Не удалось прочитать публичный ключ сервера!');

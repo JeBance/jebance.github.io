@@ -9,6 +9,7 @@ container.click = async function(elem)
 			containerInfo.innerHTML = 'Заполните форму. Эти данные будут добавлены в Ваш PGP-ключ. Придумайте сложный пароль от 8 символов для шифрования контейнера.';
 			container.elements.hide();
 			containerNameInput.show('selectable');
+			containerNameInput.focus();
 			containerEmailInput.show('selectable');
 			containerPasswordInput.show('selectable');
 			containerPasswordAccept.show();
