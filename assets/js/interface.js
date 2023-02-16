@@ -16,6 +16,10 @@ async function wrap(elem)
 			infoPage.show();
 			break;
 
+		case 'menuButtonMessages':
+			messagesPage.show();
+			break;
+
 		case 'menuButtonSettings':
 			if (secureStorage.activeAllSecureData() == true) {
 				await container.generate();

@@ -23,6 +23,7 @@ container.click = async function(elem)
 			secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
+			menuButtonMessages.hide();
 			container.choice();
 			break;
 
@@ -67,6 +68,8 @@ container.click = async function(elem)
 						if (EMAIL_REGEXP.test(containerEmailInput.value)) {
 							loader.show();
 							try {
+								container.elements.hide();
+								containerInfo.innerHTML = 'Генерация контейнера ...';
 								await secureStorage.createStorage(containerNameInput.value, containerEmailInput.value, containerPasswordInput.value);
 								if (secureStorage.activeAllSecureData() == true) await container.generate();
 							} catch(e) {
@@ -114,7 +117,6 @@ container.generate = async function()
 {
 	container.clearInputs();
 	container.elements.hide();
-	containerInfo.innerHTML = 'Генерация контейнера ...';
 	let fileHref = await secureStorage.generateSecureFile();
 	downloadNZPGPhref.setAttribute('href', fileHref);
 	downloadNZPGPhref.setAttribute('download', secureStorage.fingerprint + '.nz');
@@ -125,4 +127,5 @@ container.generate = async function()
 	containerEmail.show();
 	containerSave.show();
 	containerOff.show();
+	menuButtonMessages.show('button');
 }
