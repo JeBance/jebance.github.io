@@ -3,6 +3,7 @@ let hide = new Object();
 hide.pages = function()
 {
 	infoPage.hide();
+	messagesPage.hide();
 	accountPage.hide();
 }
 
