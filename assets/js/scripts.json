@@ -1,1 +1,1 @@
-["const.js","container.js","darkMode.js","interface.js","menu.js","openpgp.min.js","secureStorage.js"]
+["const.js","contact.js","container.js","darkMode.js","db.js","interface.js","menu.js","messages.js","openpgp.min.js","secureStorage.js","sync.js"]

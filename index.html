@@ -4,7 +4,7 @@
 	<title>jebance.github.io</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/style_new.css">
 	<link rel="stylesheet" href="assets/fa/css/font-awesome.min.css">
 	<script src="assets/js/script.js" defer></script>
 </head>
@@ -19,20 +19,33 @@
 		</div>
 		<ul class="nav">
 			<a id="menuButtonMain" class="button" onclick="wrap(this)"><li><i class="fa fa-home fa-fw" aria-hidden="true"></i>Главная</li></a>
-			<a id="menuButtonMessages" class="hide" onclick="wrap(this)"><li><i class="fa fa-comments-o fa-fw" aria-hidden="true"></i>Сообщения</li></a>
+			<a id="menuButtonContacts" class="button" onclick="wrap(this)"><li><i class="fa fa-address-book-o fa-fw" aria-hidden="true"></i>Контакты</li></a>
+			<a id="menuButtonChats" class="button" onclick="wrap(this)"><li><i class="fa fa-comments-o fa-fw" aria-hidden="true"></i>Сообщения</li></a>
 			<a id="menuButtonSettings" class="button" onclick="wrap(this)"><li><i class="fa fa-cogs fa-fw" aria-hidden="true"></i>Настройки</li></a>
 		</ul>
 	</div>
 
 	<div id="shade" class="hide" onclick="menu.animation()"></div>
 
-	<div class="wraper">
-		<div id="content" class="content">
+	<div id="modalContactBlock" class="hide">
+			<h2>Новый контакт</h2>
+			<div class="form">
+				<input id="contactFingerprint" type="text" onkeydown="{if(event.key=='Enter')addNewContact.click()}" placeholder="Отпечаток">
+				<input id="contactPassword" type="password" onkeydown="{if(event.key=='Enter')addNewContact.click()}" placeholder="Пароль собеседнику">
+				<p>Введите отпечаток собеседника и пароль для подтверждения собеседником отправки Вам своего публичного ключа.</p>
+				<button id="addNewContact" onclick="contact.addNew()">Добавить</button>
+			</div>
+	</div>
+	<div id="shadeContactBlock" class="hide" onclick="contact.animation()"></div>
 
-			<div class="header">
+	<div class="wraper">
+
+		<div id="blockLeft" class="left">
+
+			<div id="blockLeftTop" class="leftTop">
+
+				<button class="fa fa-bars fa-2x square" aria-hidden="true" onclick="menu.animation()"></button>
 				<div class="search">
-					<div id="fa-bars" class="square" onclick="menu.animation()"><i class="fa fa-bars fa-lg" aria-hidden="true"></i></div>
-					<div id="fa-search" class="square" onclick="searchLine.focus()"><i class="fa fa-search fa-lg" aria-hidden="true"></i></div>
 					<div class="search-line"><input id="searchLine" type="text" placeholder="Поиск по сайту"></div>
 					<div class="lamp">
 						<label class="switch">
@@ -41,58 +54,163 @@
 						</label>
 					</div>
 				</div>
+
 			</div>
 
-			<div id="page" class="page">
-				<div id="infoPage">
-					<div class="center">
-						<h2>Lorem Ipsum</h2>
-						<quotes>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</quotes>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vehicula consequat nulla eu elementum. Nunc mauris quam, sollicitudin sed dapibus ac, sodales nec enim. Pellentesque ac tincidunt nunc. Maecenas erat diam, volutpat nec nunc non, dapibus tincidunt elit. Curabitur blandit, justo sit amet elementum imperdiet, tortor turpis sodales lacus, imperdiet finibus mauris lacus at leo. Mauris vestibulum elementum sem, nec elementum elit consectetur at. Nunc tristique facilisis tellus, at lobortis purus bibendum ac. Nulla congue sem metus, id malesuada dolor dictum sit amet. Praesent sagittis condimentum libero facilisis facilisis. Duis dapibus non odio pretium rutrum.</p>
-						<p>Pellentesque dignissim iaculis turpis in laoreet. Pellentesque et libero venenatis, pretium leo vitae, varius ipsum. Integer sagittis posuere aliquet. Mauris lobortis imperdiet mattis. Curabitur non tellus et arcu tempus commodo eu eget ipsum. Nullam at nisi dui. Praesent ac sapien nec nulla ultrices pretium non ut risus. Integer blandit aliquet eros vitae dapibus. Ut egestas mi eget ipsum scelerisque, sit amet ultricies nulla euismod. Aliquam porttitor suscipit pellentesque. Vestibulum volutpat ut orci ac lacinia. Morbi ut tellus a augue ultricies commodo ut eu mauris. In porttitor sagittis dui vitae pretium. Cras accumsan ornare lectus eget finibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-						<p>Cras pulvinar orci augue, in viverra arcu tincidunt et. Nullam tempus justo enim, et ultrices ligula blandit ac. Suspendisse potenti. Duis commodo feugiat laoreet. Sed molestie egestas orci, nec pellentesque mauris volutpat sed. Quisque sagittis turpis ipsum, quis iaculis sapien tempor sed. Fusce dictum volutpat congue. In tempus sit amet eros ac egestas. Maecenas vitae dolor id nisi pretium faucibus in quis dolor. Nam mollis odio sit amet lectus pulvinar tristique. Cras non neque erat. Fusce nulla leo, lacinia ut volutpat ut, eleifend ac turpis. Quisque at nulla vitae felis viverra faucibus. Morbi ultricies hendrerit lacus nec dapibus. Nam auctor, arcu a vulputate interdum, est odio pulvinar velit, quis placerat nibh mi pulvinar mauris. Nam vel velit vitae odio mollis auctor.</p>
-						<p>Morbi sed tincidunt urna. Nam vitae lectus vel est consectetur efficitur. In fermentum tristique lorem eu blandit. Proin pharetra fermentum leo non faucibus. Suspendisse eleifend faucibus dui non viverra. Pellentesque porttitor, urna a imperdiet mollis, erat quam pharetra felis, vel laoreet mauris urna nec orci. Donec eget libero eget nibh vestibulum faucibus. Phasellus viverra libero erat, nec mattis elit rutrum et. Nunc sollicitudin purus id sagittis luctus. Sed elit lorem, ultricies at euismod ut, consectetur vel arcu. Cras et dolor nec enim fermentum maximus nec id lacus. Donec non ante tempor, tincidunt tellus ultrices, gravida dui.</p>
-						<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
-						<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
-					</div>
-				</div>
-				<div id="messagesPage">
-					<div class="center">
-						<h2>Lorem Ipsum</h2>
-						<quotes>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</quotes>
-						<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vehicula consequat nulla eu elementum. Nunc mauris quam, sollicitudin sed dapibus ac, sodales nec enim. Pellentesque ac tincidunt nunc. Maecenas erat diam, volutpat nec nunc non, dapibus tincidunt elit. Curabitur blandit, justo sit amet elementum imperdiet, tortor turpis sodales lacus, imperdiet finibus mauris lacus at leo. Mauris vestibulum elementum sem, nec elementum elit consectetur at. Nunc tristique facilisis tellus, at lobortis purus bibendum ac. Nulla congue sem metus, id malesuada dolor dictum sit amet. Praesent sagittis condimentum libero facilisis facilisis. Duis dapibus non odio pretium rutrum.</p>
-						<p>Pellentesque dignissim iaculis turpis in laoreet. Pellentesque et libero venenatis, pretium leo vitae, varius ipsum. Integer sagittis posuere aliquet. Mauris lobortis imperdiet mattis. Curabitur non tellus et arcu tempus commodo eu eget ipsum. Nullam at nisi dui. Praesent ac sapien nec nulla ultrices pretium non ut risus. Integer blandit aliquet eros vitae dapibus. Ut egestas mi eget ipsum scelerisque, sit amet ultricies nulla euismod. Aliquam porttitor suscipit pellentesque. Vestibulum volutpat ut orci ac lacinia. Morbi ut tellus a augue ultricies commodo ut eu mauris. In porttitor sagittis dui vitae pretium. Cras accumsan ornare lectus eget finibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
-						<p>Cras pulvinar orci augue, in viverra arcu tincidunt et. Nullam tempus justo enim, et ultrices ligula blandit ac. Suspendisse potenti. Duis commodo feugiat laoreet. Sed molestie egestas orci, nec pellentesque mauris volutpat sed. Quisque sagittis turpis ipsum, quis iaculis sapien tempor sed. Fusce dictum volutpat congue. In tempus sit amet eros ac egestas. Maecenas vitae dolor id nisi pretium faucibus in quis dolor. Nam mollis odio sit amet lectus pulvinar tristique. Cras non neque erat. Fusce nulla leo, lacinia ut volutpat ut, eleifend ac turpis. Quisque at nulla vitae felis viverra faucibus. Morbi ultricies hendrerit lacus nec dapibus. Nam auctor, arcu a vulputate interdum, est odio pulvinar velit, quis placerat nibh mi pulvinar mauris. Nam vel velit vitae odio mollis auctor.</p>
-						<p>Morbi sed tincidunt urna. Nam vitae lectus vel est consectetur efficitur. In fermentum tristique lorem eu blandit. Proin pharetra fermentum leo non faucibus. Suspendisse eleifend faucibus dui non viverra. Pellentesque porttitor, urna a imperdiet mollis, erat quam pharetra felis, vel laoreet mauris urna nec orci. Donec eget libero eget nibh vestibulum faucibus. Phasellus viverra libero erat, nec mattis elit rutrum et. Nunc sollicitudin purus id sagittis luctus. Sed elit lorem, ultricies at euismod ut, consectetur vel arcu. Cras et dolor nec enim fermentum maximus nec id lacus. Donec non ante tempor, tincidunt tellus ultrices, gravida dui.</p>
-						<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
-						<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
-					</div>
-				</div>
-				<div id="accountPage" class="hide">
-					<div id="left" class="left">
-						<h2>Настройки</h2>
-					</div>
-					<div id="right" class="right">
-						<div id="container" class="container">
-							<h2>Контейнер</h2>
-							<p id="containerInfo">Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.</p>
-							<p id="containerNickname" class="hide" name="container"></p>
-							<p id="containerEmail" class="hide" name="container"></p>
-							<button id="containerBrowse" onclick="container.click(this)" class="hide" name="container">Подключить</button>
-							<button id="containerCreate" onclick="container.click(this)" class="hide" name="container">Создать</button>
-							<input id="containerNameInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="text" placeholder="Никнейм" class="hide selectable" name="container">
-							<input id="containerEmailInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="email" placeholder="E-mail" class="hide selectable" name="container">
-							<input id="containerPasswordInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="password" placeholder="Пароль" class="hide selectable" name="container">
-							<button id="containerPasswordAccept" onclick="container.click(this)" class="hide" name="container">Подтвердить</button>
-							<button id="containerSave" onclick="container.click(this)" class="hide" name="container">Сохранить</button>
-							<button id="containerOff" onclick="container.click(this)" class="hide" name="container">Отключить</button>
-							<input id="file" type="file" onchange="container.click(this)" class="hide">
-							<a id="downloadNZPGPhref" class="hide"></a>
+			<div id="blockLeftCenter" class="leftCenter">
+
+				<div id="contacts" class="hide">
+					<div class="leftItem" onclick="contact.animation()"><div style="display:grid;justify-content:center;"><i class="fa fa-plus fa-lg" aria-hidden="true"></i></div><div>Добавить контакт</div></div>
+					<div id="1" name="contact" class="leftItem">
+						<div class="avatar">OP</div>
+						<div class="leftItemInfo">
+							<div class="leftItemInfoTop">
+								<div class="leftItemInfoName">Oleg Prudkov</div><div class="leftItemInfoTime"><pre>22:22</pre></div>
+							</div>
+							<div class="leftItemInfoBottom">
+								<div class="leftItemInfoText">Очень длинный текст последнего сообщения</div>
+								<!-- <div id="1" name="inboxCounter" class="leftItemInfoCounter">2222</div> -->
+							</div>
 						</div>
 					</div>
 				</div>
+
+				<div id="chats">
+					<div id="1" name="chat" class="leftItem">
+						<div class="avatar">OP</div>
+						<div class="leftItemInfo">
+							<div class="leftItemInfoTop">
+								<div class="leftItemInfoName">Oleg Prudkov</div><div class="leftItemInfoTime"><pre>22:22</pre></div>
+							</div>
+							<div class="leftItemInfoBottom">
+								<div class="leftItemInfoText">Очень длинный текст последнего сообщения</div>
+								<!-- <div id="1" name="inboxCounter" class="leftItemInfoCounter">2222</div> -->
+							</div>
+						</div>
+					</div>
+					<div id="1" name="chat" class="leftItem">
+						<div class="avatar">OP</div>
+						<div class="leftItemInfo">
+							<div class="leftItemInfoTop">
+								<div class="leftItemInfoName">Oleg Prudkov</div><div class="leftItemInfoTime"><pre>22:22</pre></div>
+							</div>
+							<div class="leftItemInfoBottom">
+								<div class="leftItemInfoText">Очень длинный текст последнего сообщения</div>
+								<!-- <div id="1" name="inboxCounter" class="leftItemInfoCounter">2222</div> -->
+							</div>
+						</div>
+					</div>
+					<div id="1" name="chat" class="leftItem">
+						<div class="avatar">OP</div>
+						<div class="leftItemInfo">
+							<div class="leftItemInfoTop">
+								<div class="leftItemInfoName">Oleg Prudkov</div><div class="leftItemInfoTime"><pre>22:22</pre></div>
+							</div>
+							<div class="leftItemInfoBottom">
+								<div class="leftItemInfoText">Очень длинный текст последнего сообщения</div>
+								<!-- <div id="1" name="inboxCounter" class="leftItemInfoCounter">2222</div> -->
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="infoPage" class="hide">
+					<h2>Lorem Ipsum</h2>
+					<quotes>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</quotes>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vehicula consequat nulla eu elementum. Nunc mauris quam, sollicitudin sed dapibus ac, sodales nec enim. Pellentesque ac tincidunt nunc. Maecenas erat diam, volutpat nec nunc non, dapibus tincidunt elit. Curabitur blandit, justo sit amet elementum imperdiet, tortor turpis sodales lacus, imperdiet finibus mauris lacus at leo. Mauris vestibulum elementum sem, nec elementum elit consectetur at. Nunc tristique facilisis tellus, at lobortis purus bibendum ac. Nulla congue sem metus, id malesuada dolor dictum sit amet. Praesent sagittis condimentum libero facilisis facilisis. Duis dapibus non odio pretium rutrum.</p>
+					<p>Pellentesque dignissim iaculis turpis in laoreet. Pellentesque et libero venenatis, pretium leo vitae, varius ipsum. Integer sagittis posuere aliquet. Mauris lobortis imperdiet mattis. Curabitur non tellus et arcu tempus commodo eu eget ipsum. Nullam at nisi dui. Praesent ac sapien nec nulla ultrices pretium non ut risus. Integer blandit aliquet eros vitae dapibus. Ut egestas mi eget ipsum scelerisque, sit amet ultricies nulla euismod. Aliquam porttitor suscipit pellentesque. Vestibulum volutpat ut orci ac lacinia. Morbi ut tellus a augue ultricies commodo ut eu mauris. In porttitor sagittis dui vitae pretium. Cras accumsan ornare lectus eget finibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+					<p>Cras pulvinar orci augue, in viverra arcu tincidunt et. Nullam tempus justo enim, et ultrices ligula blandit ac. Suspendisse potenti. Duis commodo feugiat laoreet. Sed molestie egestas orci, nec pellentesque mauris volutpat sed. Quisque sagittis turpis ipsum, quis iaculis sapien tempor sed. Fusce dictum volutpat congue. In tempus sit amet eros ac egestas. Maecenas vitae dolor id nisi pretium faucibus in quis dolor. Nam mollis odio sit amet lectus pulvinar tristique. Cras non neque erat. Fusce nulla leo, lacinia ut volutpat ut, eleifend ac turpis. Quisque at nulla vitae felis viverra faucibus. Morbi ultricies hendrerit lacus nec dapibus. Nam auctor, arcu a vulputate interdum, est odio pulvinar velit, quis placerat nibh mi pulvinar mauris. Nam vel velit vitae odio mollis auctor.</p>
+					<p>Morbi sed tincidunt urna. Nam vitae lectus vel est consectetur efficitur. In fermentum tristique lorem eu blandit. Proin pharetra fermentum leo non faucibus. Suspendisse eleifend faucibus dui non viverra. Pellentesque porttitor, urna a imperdiet mollis, erat quam pharetra felis, vel laoreet mauris urna nec orci. Donec eget libero eget nibh vestibulum faucibus. Phasellus viverra libero erat, nec mattis elit rutrum et. Nunc sollicitudin purus id sagittis luctus. Sed elit lorem, ultricies at euismod ut, consectetur vel arcu. Cras et dolor nec enim fermentum maximus nec id lacus. Donec non ante tempor, tincidunt tellus ultrices, gravida dui.</p>
+					<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
+					<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
+				</div>
+
+				<div id="messagesPage" class="hide">
+					<h2>Контакты</h2>
+					<div></div>
+				</div>
+
+				<div id="accountPage" class="hide">
+					<div id="container" class="container">
+						<h2>Контейнер</h2>
+			<div class="form">
+						<p id="containerInfo">Все данные передаются через сервера в зашифрованном виде. Подключите свой ранее созданный PGP контейнер с расширением .nz, или создайте новый.</p>
+						<p id="containerNickname" class="hide" name="container"></p>
+						<p id="containerEmail" class="hide" name="container"></p>
+						<button id="containerBrowse" onclick="container.click(this)" class="hide" name="container">Подключить</button>
+						<button id="containerCreate" onclick="container.click(this)" class="hide" name="container">Создать</button>
+						<input id="containerNameInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="text" placeholder="Никнейм" class="hide selectable" name="container">
+						<input id="containerEmailInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="email" placeholder="E-mail" class="hide selectable" name="container">
+						<input id="containerPasswordInput" onkeydown="{if(event.key=='Enter')container.click(containerPasswordAccept)}" type="password" placeholder="Пароль" class="hide selectable" name="container">
+						<button id="containerPasswordAccept" onclick="container.click(this)" class="hide" name="container">Подтвердить</button>
+						<button id="containerSave" onclick="container.click(this)" class="hide" name="container">Сохранить</button>
+						<button id="containerOff" onclick="container.click(this)" class="hide" name="container">Отключить</button>
+						<input id="file" type="file" onchange="container.click(this)" class="hide">
+						<a id="downloadNZPGPhref" class="hide"></a>
 			</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div id="blockLeftBottom" class="leftBottom hide">
+			</div>
+
 		</div>
+
+		<div id="blockCenter" class="hide">
+
+			<div id="blockCenterTop" class="centerTop">
+			</div>
+
+			<div id="blockCenterCenter" class="centerCenter">
+				<div id="chatReadArea" class="chatReadArea">
+					<div id="1" name="messagesDate" class="message messagesDate">Saturday</div>
+					<div id="1" name="message" class="message outgoingMessage">Hello!
+						<div name="message" class="rightMessageTime">12:30</div>
+					</div>
+					<div id="2" name="message" class="message incomingMessage">Hi!
+						<div name="message" class="leftMessageTime">12:31</div>
+					</div>
+					<div id="3" name="message" class="message outgoingMessage">How do you do?
+						<div name="message" class="rightMessageTime">12:32</div>
+					</div>
+					<div id="4" name="message" class="message incomingMessage">I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks. I'm fine. Thanks.
+						<div name="message" class="leftMessageTime">12:33</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="blockCenterBottom" class="centerBottom">
+				<div id="chatInputArea" class="chatInputArea">
+					<div id="messageInputLine" class="messageInputLine"><input id="messageInput" type="text" placeholder="Сообщение"></div>
+					<button class="fa fa-chevron-circle-right fa-2x square" style="border-radius:50%;" aria-hidden="true"></button>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="blockRight" class="right hide">
+
+			<div id="blockRightTop" class="rightTop">
+			</div>
+
+			<div id="blockRightCenter" class="rightCenter">
+				<h2>Lorem Ipsum</h2>
+				<quotes>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</quotes>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vehicula consequat nulla eu elementum. Nunc mauris quam, sollicitudin sed dapibus ac, sodales nec enim. Pellentesque ac tincidunt nunc. Maecenas erat diam, volutpat nec nunc non, dapibus tincidunt elit. Curabitur blandit, justo sit amet elementum imperdiet, tortor turpis sodales lacus, imperdiet finibus mauris lacus at leo. Mauris vestibulum elementum sem, nec elementum elit consectetur at. Nunc tristique facilisis tellus, at lobortis purus bibendum ac. Nulla congue sem metus, id malesuada dolor dictum sit amet. Praesent sagittis condimentum libero facilisis facilisis. Duis dapibus non odio pretium rutrum.</p>
+				<p>Pellentesque dignissim iaculis turpis in laoreet. Pellentesque et libero venenatis, pretium leo vitae, varius ipsum. Integer sagittis posuere aliquet. Mauris lobortis imperdiet mattis. Curabitur non tellus et arcu tempus commodo eu eget ipsum. Nullam at nisi dui. Praesent ac sapien nec nulla ultrices pretium non ut risus. Integer blandit aliquet eros vitae dapibus. Ut egestas mi eget ipsum scelerisque, sit amet ultricies nulla euismod. Aliquam porttitor suscipit pellentesque. Vestibulum volutpat ut orci ac lacinia. Morbi ut tellus a augue ultricies commodo ut eu mauris. In porttitor sagittis dui vitae pretium. Cras accumsan ornare lectus eget finibus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+				<p>Cras pulvinar orci augue, in viverra arcu tincidunt et. Nullam tempus justo enim, et ultrices ligula blandit ac. Suspendisse potenti. Duis commodo feugiat laoreet. Sed molestie egestas orci, nec pellentesque mauris volutpat sed. Quisque sagittis turpis ipsum, quis iaculis sapien tempor sed. Fusce dictum volutpat congue. In tempus sit amet eros ac egestas. Maecenas vitae dolor id nisi pretium faucibus in quis dolor. Nam mollis odio sit amet lectus pulvinar tristique. Cras non neque erat. Fusce nulla leo, lacinia ut volutpat ut, eleifend ac turpis. Quisque at nulla vitae felis viverra faucibus. Morbi ultricies hendrerit lacus nec dapibus. Nam auctor, arcu a vulputate interdum, est odio pulvinar velit, quis placerat nibh mi pulvinar mauris. Nam vel velit vitae odio mollis auctor.</p>
+				<p>Morbi sed tincidunt urna. Nam vitae lectus vel est consectetur efficitur. In fermentum tristique lorem eu blandit. Proin pharetra fermentum leo non faucibus. Suspendisse eleifend faucibus dui non viverra. Pellentesque porttitor, urna a imperdiet mollis, erat quam pharetra felis, vel laoreet mauris urna nec orci. Donec eget libero eget nibh vestibulum faucibus. Phasellus viverra libero erat, nec mattis elit rutrum et. Nunc sollicitudin purus id sagittis luctus. Sed elit lorem, ultricies at euismod ut, consectetur vel arcu. Cras et dolor nec enim fermentum maximus nec id lacus. Donec non ante tempor, tincidunt tellus ultrices, gravida dui.</p>
+				<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
+				<p>Nullam at faucibus erat, in vehicula massa. Mauris quis eleifend diam, varius laoreet lectus. Donec ultrices hendrerit fringilla. Aliquam interdum placerat nisi, nec scelerisque eros auctor blandit. Morbi non interdum ligula. Nullam semper, arcu vel faucibus pharetra, diam quam varius orci, quis facilisis lacus risus et erat. Duis tempor sit amet massa sollicitudin porttitor. In porttitor orci vel dolor facilisis blandit. Integer sodales lobortis mi, sed sagittis ipsum pretium id. Pellentesque vitae malesuada purus. Nulla vel fringilla lacus, eu ultrices justo. Morbi fermentum commodo ipsum sit amet volutpat. Donec gravida dolor a suscipit placerat. Aliquam laoreet odio sapien, a volutpat odio faucibus sit amet.</p>
+			</div>
+
+			<div id="blockRightBottom" class="rightBottom hide">
+			</div>
+
+		</div>
+
 	</div>
 
 	<div id="loader" class="hide"><div class="loader"></div></div>

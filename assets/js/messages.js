@@ -1,3 +1,4 @@
+/*
 container.click = async function(elem)
 {
 	switch(elem.id) {
@@ -23,7 +24,7 @@ container.click = async function(elem)
 			secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
-			menuButtonChats.hide();
+			menuButtonMessages.hide();
 			container.choice();
 			break;
 
@@ -127,5 +128,6 @@ container.generate = async function()
 	containerEmail.show();
 	containerSave.show();
 	containerOff.show();
-	menuButtonChats.show('button');
+	menuButtonMessages.show('button');
 }
+*/

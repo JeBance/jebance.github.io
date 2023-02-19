@@ -19,8 +19,12 @@ myHub.publicKey = null;
 
 myHub.xhr = async function(post = new Object({request:'ping'}))
 {
-	if ((post.request != 'ping') && (post.request != 'getServerPublicKey') && (secureStorage.activeAllSecureData()))
+	if ((post.request != 'ping')
+	&& (post.request != 'getServerPublicKey')
+	&& (secureStorage.activeAllSecureData())
+	&& (myHub.publicKey !== null))
 	post.request = await secureStorage.encryptMessage(myHub.publicKey, post.request);
+
 	if (post.request !== false) {
 		let post_data = (new URLSearchParams(post)).toString();
 		return new Promise((resolve, reject) => {
@@ -42,22 +46,15 @@ myHub.xhr = async function(post = new Object({request:'ping'}))
 			}
 			xhr.onprogress = (event) => {
 				if (event.lengthComputable) {
-					console.log(`Received ${event.loaded} of ${event.total} bytes`);
+//					console.log(`Received ${event.loaded} of ${event.total} bytes`);
 				} else {
-					console.log(`Received ${event.loaded} bytes`);
+//					console.log(`Received ${event.loaded} bytes`);
 				}
 			};
 		});
+	} else {
+		alert(`Не удалось сформировать запрос к серверу.\nПроверьте, подключение контейнера.`);
 	}
-}
-
-if (myHub.publicKey == null) {
-	myHub.xhr({request:'getServerPublicKey'})
-		.then((value) => {
-			result = new Object(value);
-			if (result.result == 'ok') myHub.publicKey = result.serverPublicKey;
-		})
-		.catch((error) => console.error(`${error}`));
 }
 
 String.prototype.isJsonString = function()

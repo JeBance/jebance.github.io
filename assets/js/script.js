@@ -1,4 +1,4 @@
-const SITE_URL = 'https://jebance.github.io/';
+const SITE_URL = 'https://api.jebance.ru/test/';
 
 //localStorage.clear();
 jsCheck.parentNode.removeChild(jsCheck);

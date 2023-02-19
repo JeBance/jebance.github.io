@@ -1,7 +1,7 @@
 class SecureStorage {
 	#publicKey = '';
 	#privateKey = '';
-	#publicArmoredKey = '';
+	publicArmoredKey = '';
 	#privateArmoredKey = '';
 	#passphrase = '';
 	fingerprint = '';
@@ -21,7 +21,7 @@ class SecureStorage {
 				privateKey: await openpgp.readPrivateKey({ armoredKey: privateKey }),
 				passphrase
 			});
-			this.#publicArmoredKey = publicKey;
+			this.publicArmoredKey = publicKey;
 			this.#privateArmoredKey = privateKey;
 			this.#passphrase = passphrase;
 			this.fingerprint = this.#publicKey.getFingerprint();
@@ -73,7 +73,7 @@ class SecureStorage {
 					} catch(e) {
 						alert('Не удалось прочитать публичный ключ из хранилища ключей!');
 					}
-					this.#publicArmoredKey = parseData.publicKey;
+					this.publicArmoredKey = parseData.publicKey;
 					this.#privateArmoredKey = parseData.privateKey;
 					this.#passphrase = passphrase;
 				} else {
@@ -91,14 +91,14 @@ class SecureStorage {
 		let check = false;
 		((this.#publicKey)
 		&& (this.#privateKey)
-		&& (this.#publicArmoredKey)
+		&& (this.publicArmoredKey)
 		&& (this.#privateArmoredKey)
 		&& (this.#passphrase)) ? check = true : check = false;
 		return check;
 	}
 
 	eraseAllSecureData() {
-		this.#publicArmoredKey = '';
+		this.publicArmoredKey = '';
 		this.#privateArmoredKey = '';
 		this.#passphrase = '';
 		this.fingerprint = '';
@@ -106,7 +106,7 @@ class SecureStorage {
 
 	async generateSecureFile() {
 		let string = JSON.stringify({
-			publicKey: this.#publicArmoredKey,
+			publicKey: this.publicArmoredKey,
 			privateKey: this.#privateArmoredKey
 		});
 		let encrypted = await openpgp.encrypt({
@@ -131,10 +131,10 @@ class SecureStorage {
 				});
 				return encrypted;
 			} catch(e) {
-				alert('Не удалось зашифровать запрос к серверу!');
+				alert('Не удалось зашифровать сообщение!');
 			}
 		} catch(e) {
-			alert('Не удалось прочитать публичный ключ сервера!');
+			alert('Не удалось прочитать публичный ключ получателя!');
 		}
 		return false;
 	}
@@ -142,6 +142,7 @@ class SecureStorage {
 	async decryptMessage(encrypted) {
 		try {
 			const message = await openpgp.readMessage({ armoredMessage: encrypted });
+			console.log(message);
 			try {
 				const { data: decrypted, signatures } = await openpgp.decrypt({
 					message,
@@ -166,6 +167,44 @@ class SecureStorage {
 		} catch(e) {
 			console.log(e);
 			return false;
+		}
+	}
+
+	async encryptMessageSymmetricallyWithCompression(string, passphrase) {
+		try {
+			let encrypted = await openpgp.encrypt({
+				message: await openpgp.createMessage({ text: string }),
+				passwords: [ passphrase ],
+				config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
+			});
+			return encrypted;
+		} catch (e) {
+			console.error('Симметричное шифрование не выполнено! Ошибка: ' + e.message);
+			return false;
+		}
+	}
+
+	async decryptMessageSymmetricallyWithCompression(data, passphrase) {
+		try {
+			const armMessage = await openpgp.readMessage({
+				armoredMessage: data
+			});
+			try {
+				const { data: decrypted } = await openpgp.decrypt({
+					message: armMessage,
+					passwords: [ passphrase ],
+				});
+				if (decrypted.isJsonString()) {
+					let parseData = JSON.parse(decrypted);
+					return parseData;
+				} else {
+					alert('decrypted no JSON');
+				}
+			} catch(e) {
+				alert('Неверный пароль!');
+			}
+		} catch(e) {
+			alert('Данные не являются сообщением с симметричным шифрованием!');
 		}
 	}
 }
