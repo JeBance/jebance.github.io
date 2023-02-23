@@ -18,7 +18,44 @@ sync.synchronization = async function()
 				let JSONstring = JSON.stringify({ request: 'getNewMessages' });
 				myHub.xhr({request: JSONstring})
 					.then((value) => {
-						console.log(value);
+						if (value.result == 'ok') {
+							let messagesKeys = Object.keys(value.newMessages);
+							for (let i = 0, l = messagesKeys.length; i < l; i++) {
+								if (value.newMessages[messagesKeys[i]]['request'] == 'addMe') {
+									let timestamp = value.newMessages[messagesKeys[i]]['from']['timestamp'];
+									dbInit().then((db) => {
+										let transaction = db.transaction("messages", "readwrite");
+										let messagesStore = transaction.objectStore("messages");
+
+										let addedMessage = {
+											id: messagesKeys[i],
+											chat: value.newMessages[messagesKeys[i]]['from']['fingerprint'],
+											from: value.newMessages[messagesKeys[i]]['from']['fingerprint'],
+											timestamp: value.newMessages[messagesKeys[i]]['from']['timestamp'],
+											message: value.newMessages[messagesKeys[i]]['message'],
+											request: 'addMe',
+											wasRead: false
+										};
+
+										let request = messagesStore.add(addedMessage);
+
+										request.onsuccess = function() {
+											console.log(request.result + ' - новый запрос контакта от ' + value.newMessages[messagesKeys[i]]['from']['fingerprint']);
+										};
+
+										transaction.oncomplete = function() {
+											chat.chatBlockUpdate();
+										};
+
+										request.onerror = function() {
+											let request = event.target;
+											console.error("Ошибка", request.error);
+										};
+									});
+								}
+							}
+														
+						}
 					})
 					.catch((error) => console.error(`${error}`));
 			}

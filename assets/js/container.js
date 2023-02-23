@@ -23,6 +23,7 @@ container.click = async function(elem)
 			secureStorage.eraseAllSecureData();
 			downloadNZPGPhref.removeAttribute('href');
 			downloadNZPGPhref.removeAttribute('download');
+			menuButtonContacts.hide();
 			menuButtonChats.hide();
 			container.choice();
 			break;
@@ -127,5 +128,6 @@ container.generate = async function()
 	containerEmail.show();
 	containerSave.show();
 	containerOff.show();
+	menuButtonContacts.show('button');
 	menuButtonChats.show('button');
 }

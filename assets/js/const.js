@@ -37,7 +37,7 @@ myHub.xhr = async function(post = new Object({request:'ping'}))
 				if (xhr.status != 200) {
 					reject(`Error ${xhr.status}: ${xhr.statusText}`);
 				} else {
-					console.log(`Done! Received ${event.loaded} bytes`);
+//					console.log(`Done! Received ${event.loaded} bytes`);
 					resolve(xhr.response);
 				}
 			}
@@ -65,6 +65,15 @@ String.prototype.isJsonString = function()
 		return false;
 	}
 	return true;
+}
+
+timestampToTime = function(unix_timestamp)
+{
+	let date = new Date(unix_timestamp * 1000);
+	let hours = date.getHours();
+	let minutes = "0" + date.getMinutes();
+	let formattedTime = hours + ':' + minutes.substr(-2);
+	return formattedTime;
 }
 
 Object.prototype.hide = function() { this.className = 'hide'; }

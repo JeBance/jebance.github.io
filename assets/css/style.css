@@ -394,7 +394,7 @@ hr {
 
 .leftItemInfoBottom {
 	display: grid;
-	grid-template-columns: auto;
+	grid-template-columns: auto 50px;
 }
 
 .leftItemInfoName,
@@ -433,6 +433,7 @@ hr {
 	border-radius: 10px;
 	display: block;
 	position: relative;
+	overflow-wrap: break-word;
 }
 
 .messagesDate {
@@ -477,6 +478,7 @@ hr {
 .chatInputArea {
 	width: 100%;
 	max-width: 500px;
+	padding: 0 0 0 10px;
 	color: white;
 	display: flex;
 	align-items: center;

@@ -10,7 +10,8 @@ hide.pages = function()
 }
 
 hide.pages();
-chats.show();
+menuButtonContacts.hide();
+menuButtonChats.hide();
 
 async function wrap(elem)
 {
@@ -23,10 +24,12 @@ async function wrap(elem)
 			break;
 
 		case 'menuButtonChats':
+			chat.chatBlockUpdate();
 			chats.show();
 			break;
 
 		case 'menuButtonContacts':
+			contact.contactBlockUpdate();
 			contacts.show();
 			break;
 
