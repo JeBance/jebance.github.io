@@ -303,6 +303,17 @@ hr {
 	margin: 0 0.5em 0 0.5em;
 }
 
+.tools {
+	width: 100%;
+	height: 40px;
+	margin: 0 5px 0 0;
+	padding: 0 3px 0 0;
+	display: flex;
+	align-items: center;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
 .square {
 	min-width: 40px;
 	min-height: 40px;
@@ -810,10 +821,6 @@ input:checked + .slider:before {
 		min-width: 100%;
 	}
 
-	.center {
-		display: none;
-	}
-
 	.leftCenter {
 		border: none;
 	}
@@ -843,4 +850,5 @@ input:checked + .slider:before {
 	.right {
 		display: none;
 	}
+
 }
