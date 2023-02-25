@@ -28,9 +28,9 @@ sync.synchronization = async function()
 					message.message = request.newMessages[messagesKeys[i]]['message'];
 					message.request = request.newMessages[messagesKeys[i]]['request'];
 					message.wasRead = false;
-					await message.save();
 
 					if (request.newMessages[messagesKeys[i]]['request'] == 'addMe') {
+						await message.save();
 						// если приходит запрос на добавление от собеседника, то проверяем, добавляли ли мы его раньше
 						let contact = new Contact();
 						if (await contact.init(request.newMessages[messagesKeys[i]]['from']['fingerprint'])) {
@@ -44,24 +44,31 @@ sync.synchronization = async function()
 						}
 
 					} else if (request.newMessages[messagesKeys[i]]['request'] == 'sendMessage') {
-						console.log(message);
-						if (message.message.myPublicKey) {
-							let contact = new Contact();
-							if (await contact.init(request.newMessages[messagesKeys[i]]['from']['fingerprint'])) {
-								if (contact.publicKey.length == 0) {
-									let publicArmoredKey = message.message.myPublicKey;
-									let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
-									let nickname = publicKey.users[0].userID.name;
-									let email = publicKey.users[0].userID.email;
-									let fingerprint = (publicKey.getFingerprint()).toUpperCase();
-									if (fingerprint == request.newMessages[messagesKeys[i]]['from']['fingerprint']) {
-										contact.fingerprint = fingerprint;
-										contact.publicKey = publicArmoredKey;
-										contact.nickname = nickname;
-										contact.email = email;
-										await contact.save();
+						if ((message.message.length > 0) && (message.from !== secureStorage.fingerprint)) {
+							try {
+								message.message = await secureStorage.decryptMessage(message.message);
+								await message.save();
+								if (message.message.myPublicKey) {
+									let contact = new Contact();
+									if (await contact.init(request.newMessages[messagesKeys[i]]['from']['fingerprint'])) {
+										if (contact.publicKey.length == 0) {
+											let publicArmoredKey = message.message.myPublicKey;
+											let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
+											let nickname = publicKey.users[0].userID.name;
+											let email = publicKey.users[0].userID.email;
+											let fingerprint = (publicKey.getFingerprint()).toUpperCase();
+											if (fingerprint == request.newMessages[messagesKeys[i]]['from']['fingerprint']) {
+												contact.fingerprint = fingerprint;
+												contact.publicKey = publicArmoredKey;
+												contact.nickname = nickname;
+												contact.email = email;
+												await contact.save();
+											}
+										}
 									}
 								}
+							} catch(e) {
+								console.error('Ошибка: Некорректное сообщение.\n' + e.message);
 							}
 						}
 
@@ -79,3 +86,10 @@ sync.synchronization = async function()
 }
 
 setInterval(sync.synchronization, 3000);
+
+localStorage.recipientFingerprint = '';
+localStorage.recipientPublicKey = '';
+
+
+
+

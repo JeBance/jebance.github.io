@@ -155,7 +155,7 @@ class SecureStorage {
 //					await signatures[0].verified;
 					let decodedJSON = JSON.parse(decrypted);
 					return decodedJSON;
-				} catch (e) {
+				} catch(e) {
 					//throw new Error('Signature could not be verified: ' + e.message);
 					console.error('Signature could not be verified: ' + e.message);
 					return false;
@@ -178,7 +178,7 @@ class SecureStorage {
 				config: { preferredCompressionAlgorithm: openpgp.enums.compression.zlib }
 			});
 			return encrypted;
-		} catch (e) {
+		} catch(e) {
 			console.error('Симметричное шифрование не выполнено! Ошибка: ' + e.message);
 			return false;
 		}

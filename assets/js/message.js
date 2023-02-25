@@ -41,10 +41,6 @@ class Message {
 	}
 
 	async save() {
-		if ((this.message.length > 0) && (this.request !== 'addMe')) {
-			this.message = await secureStorage.decryptMessage(this.message);
-		}
-
 		let addedMessage = {
 			id: this.id,
 			chat: this.chat,
@@ -84,5 +80,22 @@ class Message {
 		});
 		let allMessages = await x.then((value) => { return value; }).catch((error) => console.log(`${error}`));
 		return allMessages;
+	}
+
+	async checkInvite(chat_id) {
+		let allMessages = await this.getAllMessagesFromChat(chat_id);
+		console.log(allMessages);
+		let lastAddContactMessage = new Object();
+		for (let i = 0, l = allMessages.length; i < l; i++) {
+			if ((allMessages[i].request == 'addMe') && (allMessages[i].from !== secureStorage.fingerprint)) {
+				lastAddContactMessage = allMessages[i];
+			}
+		}
+		console.log(lastAddContactMessage);
+		if (lastAddContactMessage.message) {
+			return lastAddContactMessage;
+		} else {
+			return false;
+		}
 	}
 }
