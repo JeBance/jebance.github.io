@@ -24,7 +24,7 @@ class SecureStorage {
 			this.publicArmoredKey = publicKey;
 			this.#privateArmoredKey = privateKey;
 			this.#passphrase = passphrase;
-			this.fingerprint = this.#publicKey.getFingerprint();
+			this.fingerprint = (this.#publicKey.getFingerprint()).toUpperCase();
 			this.nickname = this.#publicKey.users[0].userID.name;
 			this.email = this.#publicKey.users[0].userID.email;
 		} catch(e) {
@@ -59,7 +59,7 @@ class SecureStorage {
 					let parseData = JSON.parse(decrypted);
 					try {
 						this.#publicKey = await openpgp.readKey({ armoredKey: parseData.publicKey });
-						this.fingerprint = this.#publicKey.getFingerprint();
+						this.fingerprint = (this.#publicKey.getFingerprint()).toUpperCase();
 						this.nickname = this.#publicKey.users[0].userID.name;
 						this.email = this.#publicKey.users[0].userID.email;
 						try {
@@ -142,17 +142,17 @@ class SecureStorage {
 	async decryptMessage(encrypted) {
 		try {
 			const message = await openpgp.readMessage({ armoredMessage: encrypted });
-			console.log(message);
+//			console.log(message);
 			try {
 				const { data: decrypted, signatures } = await openpgp.decrypt({
 					message,
-					verificationKeys: this.#publicKey,
+//					verificationKeys: this.#publicKey,
 					decryptionKeys: this.#privateKey
 				});
-				console.log('decrypted' + decrypted);
-				console.log('signatures' + signatures);
+//				console.log('decrypted' + decrypted);
+//				console.log('signatures' + signatures);
 				try {
-					await signatures[0].verified;
+//					await signatures[0].verified;
 					let decodedJSON = JSON.parse(decrypted);
 					return decodedJSON;
 				} catch (e) {

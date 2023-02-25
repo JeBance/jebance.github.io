@@ -1,3 +1,88 @@
+class Contact {
+	db = '';
+	transaction = '';
+	contacts = '';
+
+	fingerprint = '';
+	publicKey = '';
+	nickname = '';
+	email = '';
+
+	async initDB() {
+		this.db = await dbInit().then((db) => { return db; });
+		this.transaction = this.db.transaction("contacts", "readwrite");
+		this.contacts = this.transaction.objectStore("contacts");
+	}
+
+	async init(id) {
+		this.fingerprint = id;
+		let matches = this.fingerprint.match(/^[a-z0-9]{40}$/i);
+
+		if (matches !== null) {
+			this.fingerprint = matches[0].toUpperCase();
+		} else {
+			alert('Введён неверный отпечаток собеседника!');
+			return false;
+		}
+
+		await this.initDB();
+		let request = this.contacts.get(this.fingerprint);
+		let x = new Promise((resolve, reject) => {
+			request.onsuccess = function() { resolve(request.result); }
+		});
+		let info = await x.then((value) => { return value; });
+
+		if (info == undefined) {
+			let addedContact = {
+				fingerprint: this.fingerprint,
+				publicKey: '',
+				nickname: '',
+				email: ''
+			};
+			let request = this.contacts.add(addedContact);
+			let x = new Promise((resolve, reject) => {
+				request.onsuccess = function() { resolve(request.result); }
+			});
+			await x.then((value) => { return value; });
+			info = addedContact;
+		}
+
+		this.fingerprint = info.fingerprint;
+		this.publicKey = info.publicKey;
+		this.nickname = info.nickname;
+		this.email = info.email;
+
+		return true;
+	}
+
+	async save() {
+		let addedContact = {
+			fingerprint: this.fingerprint,
+			publicKey: this.publicKey,
+			nickname: this.nickname,
+			email: this.email
+		};
+
+		await this.initDB();
+		let request = this.contacts.put(addedContact);
+		let x = new Promise((resolve, reject) => {
+			request.onsuccess = function() { resolve(request.result); }
+		});
+		await x.then((value) => { return value; });
+	}
+
+	async getAllContacts() {
+		await this.initDB();
+		let request = this.contacts.getAll();
+		let x = new Promise((resolve, reject) => {
+			request.onsuccess = function() { resolve(request.result); }
+		});
+		let allContacts = await x.then((value) => { return value; });
+		return allContacts;
+	}
+}
+
+
 let contact = new Object();
 
 contact.animation = function()
@@ -16,57 +101,24 @@ contact.animation = function()
 
 contact.addNew = async function()
 {
-	if (contactFingerprint.value.length > 0) {
-		let matches = contactFingerprint.value.match(/^[a-z0-9]{40}$/i);
-		if (matches !== null) {
-			if (contactPassword.value.length > 0) {
-				let string = JSON.stringify({ myPublicKey: secureStorage.publicArmoredKey });
-				let recipient = matches[0].toUpperCase();
-				let message = await secureStorage.encryptMessageSymmetricallyWithCompression(string, contactPassword.value);
-				let JSONstring = JSON.stringify({ request: 'addMe', message: message, to: recipient });
-				myHub.xhr({request: JSONstring })
-					.then((value) => {
-						if (value.result == 'ok') {
-							contact.animation();
-							dbInit().then((db) => {
-								let transaction = db.transaction("contacts", "readwrite");
-								let contactsStore = transaction.objectStore("contacts");
-
-								let addedContact = {
-									fingerprint: recipient,
-									publicKey: '',
-									nickname: '',
-									email: ''
-								};
-
-								contactsStore.delete(recipient);
-								let request = contactsStore.add(addedContact);
-
-								request.onsuccess = function() {
-									console.log("Контакт добавлен: ", request.result);
-								};
-
-								transaction.oncomplete = function() {
-									console.log("Транзакция выполнена");
-									contact.contactBlockUpdate();
-								};
-
-								request.onerror = function() {
-									let request = event.target;
-									console.error("Ошибка", request.error);
-								};
-							});
-						}
-					})
-					.catch((error) => console.error(`${error}`));
-			} else {
-				alert('Введите пароль для собеседника, чтобы он мог подтвердить добавление.');
-			}
-		} else {
-			alert('Введён неверный отпечаток собеседника!');
+	if (contactPassword.value.length > 0) {
+		let recipient = new Contact();
+		if (await recipient.init(contactFingerprint.value)) {
+			await recipient.save();
+			let string = JSON.stringify({ myPublicKey: secureStorage.publicArmoredKey });
+			let message = await secureStorage.encryptMessageSymmetricallyWithCompression(string, contactPassword.value);
+			let JSONstring = JSON.stringify({ request: 'addMe', message: message, to: recipient.fingerprint });
+			myHub.xhr({request: JSONstring })
+				.then((value) => {
+					if (value.result == 'ok') {
+						contact.animation();
+						contact.contactBlockUpdate();
+					}
+				})
+				.catch((error) => console.error(`${error}`));
 		}
 	} else {
-		alert('Введите отпечаток собеседника!');
+		alert('Введите пароль для собеседника, чтобы он мог подтвердить добавление.');
 	}
 }
 
@@ -74,37 +126,12 @@ contact.contactBlockUpdate = async function()
 {
 	contacts.innerHTML = '';
 	await contact.getAddButton();
-
-	dbInit().then((db) => {
-		let transaction = db.transaction("contacts", "readonly");
-		let contactsStore = transaction.objectStore("contacts");
-		let nicknameIndex = contactsStore.index("nickname_id");
-		let request = nicknameIndex.getAll();
-		request.onsuccess = function() {
-			if (request.result !== undefined) {
-				allContacts = request.result;
-				for (let i = 0, l = allContacts.length; i < l; i++) {
-					contact.getContactButton(allContacts[i]);
-				}
-			}
-		};
-	});
+	let x = new Contact();
+	let allContacts = await x.getAllContacts();
+	for (let i = 0, l = allContacts.length; i < l; i++)
+	contact.getContactButton(allContacts[i]);
 }
 
-/*
-<div id="1" name="contact" class="leftItem">
-	<div class="avatar">👾</div>
-	<div class="leftItemInfo">
-		<div class="leftItemInfoTop">
-			<div class="leftItemInfoName">Oleg Prudkov</div><div class="leftItemInfoTime"><pre>22:22</pre></div>
-		</div>
-		<div class="leftItemInfoBottom">
-			<div class="leftItemInfoText">Очень длинный текст последнего сообщения</div>
-			<!-- <div id="1" name="inboxCounter" class="leftItemInfoCounter">2222</div> -->
-		</div>
-	</div>
-</div>
-*/
 contact.getContactButton = function(obj)
 {
 	let newContainerForContact = document.createElement('div');

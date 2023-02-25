@@ -1,4 +1,4 @@
-const VERSION = '0.3.14';
+const VERSION = '0.3.15';
 console.log('VERSION: '+VERSION);
 const API_URL = 'https://api.jebance.ru/';
 const EMAIL_REGEXP = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/iu;

@@ -10,17 +10,8 @@ chat.closeModal = function()
 chat.addNew = async function(id)
 {
 	if (contactAccessPassword.value.length > 0) {
-		let db = await dbInit().then((db) => { return db; });
-		let transactionMessages = db.transaction("messages", "readonly");
-		let messagesStore = transactionMessages.objectStore("messages");
-		let chatIndex = messagesStore.index("chat_id");
-
-		let requestMessages = chatIndex.getAll(id);
-		x = new Promise((resolve, reject) => {
-			requestMessages.onsuccess = function() { resolve(requestMessages.result); }
-		});
-		let allMessages = await x.then((value) => { return value; });
-//		let allMessages = await (new Promise((resolve, reject) => { requestMessages.onsuccess = function() { resolve(requestMessages.result); }})).then((value) => { return value; });
+		let message = new Message();
+		let allMessages = await message.getAllMessagesFromChat(id);
 
 		let lastAddContactMessage = new Object();
 		for (let i = 0, l = allMessages.length; i < l; i++) {
@@ -32,46 +23,34 @@ chat.addNew = async function(id)
 		if (lastAddContactMessage.message.length > 0) {
 			let decrypted = await secureStorage.decryptMessageSymmetricallyWithCompression(lastAddContactMessage.message, contactAccessPassword.value);
 			if ((decrypted) && (decrypted.myPublicKey.length > 0)) {
-				let publicArmoredKey = decrypted.myPublicKey;
-				let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
-				let nickname = publicKey.users[0].userID.name;
-				let email = publicKey.users[0].userID.email;
-				let fingerprint = (publicKey.getFingerprint()).toUpperCase();
-				if (fingerprint == id) {
-					let transactionContacts = db.transaction("contacts", "readwrite");
-					let contactsStore = transactionContacts.objectStore("contacts");
-					let addedContact = {
-						fingerprint: fingerprint,
-						publicKey: publicArmoredKey,
-						nickname: nickname,
-						email: email
-					};
-					let requestContacts = contactsStore.put(addedContact);
-					x = new Promise((resolve, reject) => {
-						requestContacts.onsuccess = function() { resolve(requestContacts.result); }
-					});
-					let contact = await x.then((value) => { return value; });
+				let contact = new Contact();
+				if (await contact.init(id)) {
+					if (contact.publicKey.length == 0) {
+						let publicArmoredKey = decrypted.myPublicKey;
+						let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
+						let nickname = publicKey.users[0].userID.name;
+						let email = publicKey.users[0].userID.email;
+						let fingerprint = (publicKey.getFingerprint()).toUpperCase();
+						if (fingerprint == id) {
+							contact.fingerprint = fingerprint;
+							contact.publicKey = publicArmoredKey;
+							contact.nickname = nickname;
+							contact.email = email;
+							await contact.save();
 
-					lastAddContactMessage.wasRead = true;
+							await message.init(lastAddContactMessage.id);
+							message.wasRead = true;
+							await message.save();
 
-					let transactionMessages = db.transaction("messages", "readwrite");
-					let messagesStore = transactionMessages.objectStore("messages");
+							let string = JSON.stringify({ myPublicKey: secureStorage.publicArmoredKey });
+							let encryptedMessage = await secureStorage.encryptMessage(publicArmoredKey, string);
+							let JSONstring = JSON.stringify({ request: 'sendMessage', to: fingerprint, message: encryptedMessage });
+							await myHub.xhr({request: JSONstring }).then((value) => { return value; });
 
-					let requestMessages = messagesStore.put(lastAddContactMessage);
-					x = new Promise((resolve, reject) => {
-						requestMessages.onsuccess = function() { resolve(requestMessages.result); }
-					});
-					let putMessage = await x.then((value) => { return value; });
-
-					let chatIndex = messagesStore.index("chat_id");
-					requestMessages = chatIndex.getAll(id);
-					x = new Promise((resolve, reject) => {
-						requestMessages.onsuccess = function() { resolve(requestMessages.result); }
-					});
-					let allMessages = await x.then((value) => { return value; });
-
-					chat.chatBlockUpdate();
-					chat.closeModal();
+							chat.chatBlockUpdate();
+							chat.closeModal();
+						}
+					}
 				}
 			}
 		} else {
@@ -86,15 +65,8 @@ chat.addNew = async function(id)
 chat.chatBlockUpdate = async function()
 {
 	chats.innerHTML = '';
-	let db = await dbInit().then((db) => { return db; });
-	let transaction = db.transaction("messages", "readonly");
-	let messagesStore = transaction.objectStore("messages");
-	let chatIndex = messagesStore.index("chat_id");
-	let requestMessages = chatIndex.getAll();
-	x = new Promise((resolve, reject) => {
-		requestMessages.onsuccess = function() { resolve(requestMessages.result); }
-	});
-	let allMessages = await x.then((value) => { return value; });
+	let message = new Message();
+	let allMessages = await message.getAllMessages();
 	let allChats = new Object();
 	for (let i = 0, l = allMessages.length; i < l; i++) {
 		if ((allMessages[i].chat in allChats) == false) {
@@ -108,14 +80,8 @@ chat.getChatButton = async function(obj)
 {
 	console.log(obj);
 
-	let db = await dbInit().then((db) => { return db; });
-	let transactionContacts = db.transaction("contacts", "readonly");
-	let contactsStore = transactionContacts.objectStore("contacts");
-	let requestContacts = contactsStore.get(obj.chat);
-	x = new Promise((resolve, reject) => {
-		requestContacts.onsuccess = function() { resolve(requestContacts.result); }
-	});
-	let contactInfo = await x.then((value) => { return value; });
+	let contact = new Contact();
+	await contact.init(obj.chat);
 
 	let newContainerForChat = document.createElement('div');
 	newContainerForChat.id = obj.chat;
@@ -132,24 +98,24 @@ chat.getChatButton = async function(obj)
 	newDivForLeftItemInfoBottom.className = 'leftItemInfoBottom';
 	let newDivForLeftItemInfoName = document.createElement('div');
 	newDivForLeftItemInfoName.className = 'leftItemInfoName';
-	if (contactInfo.publicKey.length == 0) {
+	if (contact.publicKey.length == 0) {
 		newDivForLeftItemInfoName.innerHTML = 'Ожидает подтверждения';
 		newDivForLeftItemInfoName.setAttribute('style', 'color:red;');
 	} else {
-		newDivForLeftItemInfoName.innerHTML = contactInfo.nickname;
+		newDivForLeftItemInfoName.innerHTML = contact.nickname;
 	}
 	let newDivForLeftItemInfoTime = document.createElement('div');
 	newDivForLeftItemInfoTime.className = 'leftItemInfoTime';
 	newDivForLeftItemInfoTime.innerHTML = timestampToTime(obj.timestamp);
 	let newDivForLeftItemInfoText = document.createElement('div');
 	newDivForLeftItemInfoText.className = 'leftItemInfoText';
-	if (contactInfo.publicKey.length == 0) {
+	if (contact.publicKey.length == 0) {
 		newDivForLeftItemInfoText.innerHTML = obj.chat;
 	} else {
 		if (obj.request == 'addMe') {
 			newDivForLeftItemInfoText.innerHTML = 'Запрос на добавление контакта';
 		} else {
-			newDivForLeftItemInfoText.innerHTML = obj.message;
+			newDivForLeftItemInfoText.innerHTML = obj.message.message;
 		}
 	}
 	let newDivForLeftItemInfoCounter = document.createElement('div');
@@ -175,44 +141,42 @@ chat.getChatButton = async function(obj)
 chat.getChat = async function(id)
 {
 	chatReadArea.innerHTML = '';
-	let db = await dbInit().then((db) => { return db; });
-	let transactionContacts = db.transaction("contacts", "readonly");
-	let contactsStore = transactionContacts.objectStore("contacts");
-	let requestContacts = contactsStore.get(id);
-	x = new Promise((resolve, reject) => {
-		requestContacts.onsuccess = function() { resolve(requestContacts.result); }
-	});
-	let contactInfo = await x.then((value) => { return value; });
-	if (contactInfo.publicKey.length == 0) {
-		chat.getAddContactAccessForm(id);
-	} else {
-		let transactionMessages = db.transaction("messages", "readonly");
-		let messagesStore = transactionMessages.objectStore("messages");
-		let chatIndex = messagesStore.index("chat_id");
-		let requestMessages = chatIndex.getAll(id);
-		requestMessages.onsuccess = function() {
-			allMessages = requestMessages.result;
+	let contact = new Contact();
+	if (await contact.init(id)) {
+		if (contact.publicKey.length == 0) {
+			if (id !== secureStorage.fingerprint)
+			chat.getAddContactAccessForm(id);
+		} else {
+			localStorage.recipientFingerprint = contact.fingerprint;
+			localStorage.recipientPublicKey = contact.publicKey;
+			let message = new Message();
+			let allMessages = await message.getAllMessagesFromChat(id);
 			for (let i = 0, l = allMessages.length; i < l; i++) {
 				chat.getMessage(allMessages[i]);
 			}
-		};
+			blockCenter.show('center');
+			blockCenterCenter.scrollTop = blockCenterCenter.scrollHeight;
+		}
 	}
-
-
-
-//	chatInputArea.hide();
-//	blockCenter.show('center');
 }
 
-chat.getMessage = function(obj)
+chat.getMessage = async function(obj)
 {
+	console.log(obj);
 	let newContainerForMessage = document.createElement('div');
 	newContainerForMessage.id = obj.id;
 	newContainerForMessage.setAttribute('name', 'message');
-	(obj.from == obj.chat)
-	? newContainerForMessage.className = 'message incomingMessage'
-	: newContainerForMessage.className = 'message outgoingMessage';
-	newContainerForMessage.innerHTML = obj.message;
+	if (obj.from == secureStorage.fingerprint) {
+		newContainerForMessage.className = 'message outgoingMessage';
+		newContainerForMessage.innerHTML = obj.message;
+	} else if (obj.from == obj.chat) {
+		newContainerForMessage.className = 'message incomingMessage';
+		if ((obj.request !== 'addMe') && (obj.message.message)) newContainerForMessage.innerHTML = obj.message.message;
+	} else {
+		newContainerForMessage.className = 'message outgoingMessage';
+		newContainerForMessage.innerHTML = obj.message;
+	}
+	if (obj.request == 'addMe') newContainerForMessage.innerHTML = 'Запрос на добавление контакта';
 
 	let newContainerForTime = document.createElement('div');
 	newContainerForTime.id = obj.id;
@@ -224,7 +188,7 @@ chat.getMessage = function(obj)
 
 	newContainerForMessage.append(newContainerForTime);
 	chatReadArea.append(newContainerForMessage);
-	
+	blockCenterCenter.scrollTop = blockCenterCenter.scrollHeight;
 }
 
 chat.getAddContactAccessForm = function(id)
@@ -255,4 +219,38 @@ chat.getAddContactAccessForm = function(id)
 	newShade.setAttribute('onclick', 'chat.closeModal()');
 	document.body.append(newShade);
 	newInputForPassword.focus();
+}
+
+chat.sendMessage = async function()
+{
+	if (messageInput.value.length > 0) {
+		let string = JSON.stringify({ message: messageInput.value });
+		let encryptedMessage = await secureStorage.encryptMessage(localStorage.recipientPublicKey, string);
+		let JSONstring = JSON.stringify({ request: 'sendMessage', to: localStorage.recipientFingerprint, message: encryptedMessage });
+//		console.log(JSONstring);
+		let request = await myHub.xhr({request: JSONstring }).then((value) => { return value; });
+//		console.log(request);
+		if (request.result == 'ok') {
+			let message = {
+				id: request.response,
+				chat: localStorage.recipientFingerprint,
+				from: secureStorage.fingerprint.toUpperCase(),
+				message: String(messageInput.value),
+				request: 'sendMessage',
+				timestamp: Math.floor(Date.now() / 1000),
+				wasRead: false
+			}
+			chat.getMessage(message);
+			// сохранить сообщение в БД
+			let db = await dbInit().then((db) => { return db; });
+			let transactionMessages = db.transaction("messages", "readwrite");
+			let messagesStore = transactionMessages.objectStore("messages");
+			let requestMessages = messagesStore.add(message);
+			x = new Promise((resolve, reject) => {
+				requestMessages.onsuccess = function() { resolve(requestMessages.result); }
+			});
+			await x.then((value) => { return value; });
+			messageInput.value = '';
+		}
+	}
 }
