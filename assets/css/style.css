@@ -31,6 +31,13 @@
 	-webkit-user-select: none; 
 }
 
+.selectable {
+	-moz-user-select: all;
+	-webkit-user-select: all;
+	-ms-user-select: all;
+	user-select: all;
+}
+
 body {
 	margin: 0;
 	padding: 0;

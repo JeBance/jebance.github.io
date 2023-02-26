@@ -30,8 +30,8 @@
 	<div id="modalContactBlock" class="hide">
 			<h2>Новый контакт</h2>
 			<div class="form">
-				<input id="contactFingerprint" type="text" onkeydown="{if(event.key=='Enter')addNewContact.click()}" placeholder="Отпечаток">
-				<input id="contactPassword" type="password" onkeydown="{if(event.key=='Enter')addNewContact.click()}" placeholder="Пароль собеседнику">
+				<input id="contactFingerprint" type="text" onkeydown="{if(event.key=='Enter')addNewContact.click()}" placeholder="Отпечаток" class="selectable">
+				<input id="contactPassword" type="password" onkeydown="{if(event.key=='Enter')addNewContact.click()}" placeholder="Пароль собеседнику" class="selectable">
 				<p>Введите отпечаток собеседника и пароль для подтверждения собеседником отправки Вам своего публичного ключа.</p>
 				<button id="addNewContact" onclick="contact.addNew()">Добавить</button>
 			</div>
@@ -46,7 +46,7 @@
 
 				<button class="fa fa-bars fa-2x square" aria-hidden="true" onclick="menu.animation()"></button>
 				<div class="search">
-					<div class="search-line"><input id="searchLine" type="text" placeholder="Поиск по сайту"></div>
+					<div class="search-line"><input id="searchLine" type="text" placeholder="Поиск по сайту" class="selectable"></div>
 					<div class="lamp">
 						<label class="switch">
 							<input id="lamp" type="checkbox" checked>
@@ -193,7 +193,7 @@
 
 			<div id="blockCenterBottom" class="centerBottom">
 				<div id="chatInputArea" class="chatInputArea">
-					<div id="messageInputLine" class="messageInputLine"><input id="messageInput" type="text" placeholder="Сообщение" onkeydown="{if(event.key=='Enter')sendMessageButton.click()}"></div>
+					<div id="messageInputLine" class="messageInputLine"><input id="messageInput" type="text" placeholder="Сообщение" onkeydown="{if(event.key=='Enter')sendMessageButton.click()}" class="selectable"></div>
 					<button id="sendMessageButton" class="fa fa-chevron-circle-right fa-2x square" style="border-radius:50%;" aria-hidden="true" onclick="chat.sendMessage()"></button>
 				</div>
 			</div>
