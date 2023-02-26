@@ -52,17 +52,20 @@ sync.synchronization = async function()
 									let contact = new Contact();
 									if (await contact.init(request.newMessages[messagesKeys[i]]['from']['fingerprint'])) {
 										if (contact.publicKey.length == 0) {
-											let publicArmoredKey = message.message.myPublicKey;
-											let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
-											let nickname = publicKey.users[0].userID.name;
-											let email = publicKey.users[0].userID.email;
-											let fingerprint = (publicKey.getFingerprint()).toUpperCase();
-											if (fingerprint == request.newMessages[messagesKeys[i]]['from']['fingerprint']) {
-												contact.fingerprint = fingerprint;
-												contact.publicKey = publicArmoredKey;
-												contact.nickname = nickname;
-												contact.email = email;
-												await contact.save();
+											let invitation = await message.checkInvite(request.newMessages[messagesKeys[i]]['from']['fingerprint']);
+											if ((invitation.message) && (invitation.wasRead)) {
+												let publicArmoredKey = message.message.myPublicKey;
+												let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
+												let nickname = publicKey.users[0].userID.name;
+												let email = publicKey.users[0].userID.email;
+												let fingerprint = (publicKey.getFingerprint()).toUpperCase();
+												if (fingerprint == request.newMessages[messagesKeys[i]]['from']['fingerprint']) {
+													contact.fingerprint = fingerprint;
+													contact.publicKey = publicArmoredKey;
+													contact.nickname = nickname;
+													contact.email = email;
+													await contact.save();
+												}
 											}
 										}
 									}
