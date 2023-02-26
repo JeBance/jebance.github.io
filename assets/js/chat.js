@@ -137,7 +137,7 @@ chat.getChat = async function(id)
 		if (contact.publicKey.length == 0) {
 			if (id !== secureStorage.fingerprint) {
 				let message = new Message();
-				if (message.checkInvite(id) !== false)
+				if ((await message.checkInvite(id)) !== false)
 				chat.getAddContactAccessForm(id);
 			}
 		} else {

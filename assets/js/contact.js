@@ -108,9 +108,20 @@ contact.addNew = async function()
 			let string = JSON.stringify({ myPublicKey: secureStorage.publicArmoredKey });
 			let message = await secureStorage.encryptMessageSymmetricallyWithCompression(string, contactPassword.value);
 			let JSONstring = JSON.stringify({ request: 'addMe', message: message, to: recipient.fingerprint });
-			myHub.xhr({request: JSONstring })
+			await myHub.xhr({request: JSONstring })
 				.then((value) => {
 					if (value.result == 'ok') {
+						let message = new Message();
+						if ((await message.init(value.response)) == false) {
+							message.id = value.response;
+							message.chat = recipient.fingerprint;
+							message.from = secureStorage.fingerprint;
+							message.timestamp = Math.floor(Date.now() / 1000);
+							message.message = JSON.parse(string);
+							message.request = 'addMe';
+							message.wasRead = true;
+							await message.save();
+						}
 						contact.animation();
 						contact.contactBlockUpdate();
 					}

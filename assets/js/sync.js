@@ -52,7 +52,7 @@ sync.synchronization = async function()
 									let contact = new Contact();
 									if (await contact.init(request.newMessages[messagesKeys[i]]['from']['fingerprint'])) {
 										if (contact.publicKey.length == 0) {
-											let invitation = await message.checkInvite(request.newMessages[messagesKeys[i]]['from']['fingerprint']);
+											let invitation = await message.checkInvite(secureStorage.fingerprint);
 											if ((invitation.message) && (invitation.wasRead)) {
 												let publicArmoredKey = message.message.myPublicKey;
 												let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });

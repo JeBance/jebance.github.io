@@ -84,14 +84,14 @@ class Message {
 
 	async checkInvite(chat_id) {
 		let allMessages = await this.getAllMessagesFromChat(chat_id);
-		console.log(allMessages);
+		//console.log(allMessages);
 		let lastAddContactMessage = new Object();
 		for (let i = 0, l = allMessages.length; i < l; i++) {
-			if ((allMessages[i].request == 'addMe') && (allMessages[i].from !== secureStorage.fingerprint)) {
+			if ((allMessages[i].request == 'addMe') && (allMessages[i].from == chat_id)) {
 				lastAddContactMessage = allMessages[i];
 			}
 		}
-		console.log(lastAddContactMessage);
+		//console.log(lastAddContactMessage);
 		if (lastAddContactMessage.message) {
 			return lastAddContactMessage;
 		} else {
