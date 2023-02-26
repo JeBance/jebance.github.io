@@ -39,7 +39,7 @@ container.click = async function(elem)
 						if (value == true) {
 							container.elements.hide();
 							containerInfo.innerHTML = 'Введите пароль для дешифровки контейнера.';
-							containerPasswordInput.show();
+							containerPasswordInput.show('selectable');
 							containerPasswordInput.focus();
 							containerPasswordAccept.show();
 						}
