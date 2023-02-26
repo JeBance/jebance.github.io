@@ -52,8 +52,9 @@ sync.synchronization = async function()
 									let contact = new Contact();
 									if (await contact.init(request.newMessages[messagesKeys[i]]['from']['fingerprint'])) {
 										if (contact.publicKey.length == 0) {
-											let invitation = await message.checkInvite(secureStorage.fingerprint);
-											if ((invitation.message) && (invitation.wasRead)) {
+											let outgoingInvitation = await message.checkOutgoingInvitation(request.newMessages[messagesKeys[i]]['from']['fingerprint']);
+											console.log(outgoingInvitation)
+											if (outgoingInvitation.message) {
 												let publicArmoredKey = message.message.myPublicKey;
 												let publicKey = await openpgp.readKey({ armoredKey: publicArmoredKey });
 												let nickname = publicKey.users[0].userID.name;

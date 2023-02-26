@@ -82,16 +82,29 @@ class Message {
 		return allMessages;
 	}
 
-	async checkInvite(chat_id) {
+	async checkIncomingInvitation(chat_id) {
 		let allMessages = await this.getAllMessagesFromChat(chat_id);
-		//console.log(allMessages);
 		let lastAddContactMessage = new Object();
 		for (let i = 0, l = allMessages.length; i < l; i++) {
 			if ((allMessages[i].request == 'addMe') && (allMessages[i].from == chat_id)) {
 				lastAddContactMessage = allMessages[i];
 			}
 		}
-		//console.log(lastAddContactMessage);
+		if (lastAddContactMessage.message) {
+			return lastAddContactMessage;
+		} else {
+			return false;
+		}
+	}
+
+	async checkOutgoingInvitation(chat_id) {
+		let allMessages = await this.getAllMessagesFromChat(chat_id);
+		let lastAddContactMessage = new Object();
+		for (let i = 0, l = allMessages.length; i < l; i++) {
+			if ((allMessages[i].request == 'addMe') && (allMessages[i].from == secureStorage.fingerprint)) {
+				lastAddContactMessage = allMessages[i];
+			}
+		}
 		if (lastAddContactMessage.message) {
 			return lastAddContactMessage;
 		} else {

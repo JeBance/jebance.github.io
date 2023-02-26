@@ -11,7 +11,7 @@ chat.addNew = async function(id)
 {
 	if (contactAccessPassword.value.length > 0) {
 		let message = new Message();
-		let lastAddContactMessage = await message.checkInvite(id);
+		let lastAddContactMessage = await message.checkIncomingInvitation(id);
 
 		if (lastAddContactMessage.message) {
 			let decrypted = await secureStorage.decryptMessageSymmetricallyWithCompression(lastAddContactMessage.message, contactAccessPassword.value);
@@ -137,7 +137,7 @@ chat.getChat = async function(id)
 		if (contact.publicKey.length == 0) {
 			if (id !== secureStorage.fingerprint) {
 				let message = new Message();
-				if ((await message.checkInvite(id)) !== false)
+				if ((await message.checkIncomingInvitation(id)) !== false)
 				chat.getAddContactAccessForm(id);
 			}
 		} else {
