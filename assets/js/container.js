@@ -33,7 +33,8 @@ container.click = async function(elem)
 			let reader = new FileReader();
 			reader.readAsText(x);
 			reader.onload = function() {
-				if (x.name.substring(x.name.length - 3) == '.nz') {
+				if ((x.name.substring(x.name.length - 3) == '.nz')
+				|| (x.name.substring(x.name.length - 4) == '.pgp')) {
 					file.data = reader.result;
 					secureStorage.checkStorage(file.data).then((value) => {
 						if (value == true) {

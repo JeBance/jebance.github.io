@@ -433,11 +433,9 @@ hr {
 
 .topChat {
 	width: 100%;
-	margin: 1px 0 1px 0;
-	cursor: pointer;
 	display: grid;
 	align-items: center;
-	grid-template-columns: 70px auto;
+	grid-template-columns: 60px auto;
 }
 
 .avatarChat {
