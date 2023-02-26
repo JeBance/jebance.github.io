@@ -143,6 +143,7 @@ chat.getChat = async function(id)
 		} else {
 			localStorage.recipientFingerprint = contact.fingerprint;
 			localStorage.recipientPublicKey = contact.publicKey;
+			topChatInfoName.innerHTML = contact.nickname;
 			let message = new Message();
 			let allMessages = await message.getAllMessagesFromChat(id);
 			for (let i = 0, l = allMessages.length; i < l; i++) {
