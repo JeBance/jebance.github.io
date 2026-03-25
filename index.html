@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JeBance Hub | VPN, Proxy, Projects</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f7fc;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+            color: #1a2634;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* header / title */
+        .header {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        .header h1 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1f2b38, #2c3e50);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .header p {
+            color: #4b5e77;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+
+        /* cards style */
+        .section-card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            padding: 1.8rem 2rem;
+            transition: all 0.2s ease;
+        }
+        .section-card:hover {
+            box-shadow: 0 20px 32px -12px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            border-left: 5px solid #2d7a9b;
+            padding-left: 1rem;
+            color: #1f2f3e;
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            color: #4a627a;
+            margin-bottom: 1.2rem;
+        }
+
+        /* grids & lists */
+        .links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0 0.5rem;
+        }
+        .link-item {
+            background: #f0f4f9;
+            border-radius: 60px;
+            padding: 0.6rem 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            transition: all 0.2s;
+        }
+        .link-item a {
+            text-decoration: none;
+            color: #1f6392;
+            font-weight: 500;
+            font-size: 0.9rem;
+            word-break: break-all;
+            max-width: 400px;
+        }
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+        .btn-qr {
+            background: #2c3e50;
+            border: none;
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .btn-qr:hover {
+            background: #1f6392;
+            transform: scale(0.96);
+        }
+
+        /* server list style */
+        .server-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .server-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #f8fafd;
+            padding: 0.7rem 1rem;
+            border-radius: 60px;
+            gap: 0.8rem;
+        }
+        .server-url {
+            font-family: 'SF Mono', monospace;
+            font-size: 0.8rem;
+            color: #2c5a7a;
+            word-break: break-all;
+            flex: 1;
+        }
+        .server-url a {
+            text-decoration: none;
+            color: #1f6392;
+        }
+        .project-item {
+            background: #f9fbfd;
+            border-radius: 20px;
+            padding: 1rem 1.2rem;
+            margin-bottom: 1rem;
+            transition: 0.1s linear;
+            border: 1px solid #eef2f8;
+        }
+        .project-item a {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #1e4663;
+            text-decoration: none;
+        }
+        .project-item a:hover {
+            text-decoration: underline;
+        }
+        .project-desc {
+            margin-top: 0.4rem;
+            color: #2c3e50;
+            font-size: 0.9rem;
+        }
+
+        .contacts-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+        .contact-badge {
+            background: #eef3fc;
+            padding: 0.75rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 500;
+        }
+        .contact-badge a {
+            text-decoration: none;
+            color: #136b9c;
+            font-size: 1.1rem;
+        }
+
+        /* modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 32px;
+            max-width: 90vw;
+            width: 340px;
+            padding: 1.8rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 30px 40px rgba(0,0,0,0.2);
+            animation: fadeInUp 0.2s ease;
+        }
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-content canvas {
+            margin: 0.8rem auto;
+            background: white;
+            padding: 8px;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .modal-close {
+            background: #e2e8f0;
+            border: none;
+            font-size: 1rem;
+            padding: 0.5rem 1.5rem;
+            border-radius: 40px;
+            margin-top: 1rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .qr-link-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            word-break: break-word;
+            font-size: 0.8rem;
+            color: #2c3e50;
+        }
+        hr {
+            margin: 1rem 0;
+            border: none;
+            height: 1px;
+            background: #e2edf2;
+        }
+        @media (max-width: 680px) {
+            .section-card { padding: 1.2rem; }
+            .server-row { border-radius: 20px; flex-direction: column; align-items: flex-start; }
+            .btn-qr { align-self: flex-end; }
+            .link-item { width: 100%; justify-content: space-between; }
+        }
+        footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #7b8c9e;
+            margin-top: 1rem;
+        }
+        button {
+            font-family: inherit;
+        }
+    </style>
+    <!-- QR Code library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>jebance · hub</h1>
+        <p>VPN · Telegram Proxy · Open Source Projects</p>
+    </div>
+
+    <!-- ==================== VPN SECTION ==================== -->
+    <div class="section-card">
+        <h2 class="section-title">🔐 VPN</h2>
+        <div class="subtitle">Клиенты для всех платформ:</div>
+        <div class="links-grid" id="vpn-clients">
+            <!-- Happ client -->
+            <div class="link-item"><a href="https://www.happ.su/main/ru" target="_blank">📱 Happ (iOS/Android/Desktop/TV)</a><button class="btn-qr" data-url="https://www.happ.su/main/ru">QR</button></div>
+            <div class="link-item"><a href="https://v2raytun.com/download" target="_blank">⚡ v2RayTun (Windows/macOS/Linux/Android/TV)</a><button class="btn-qr" data-url="https://v2raytun.com/download">QR</button></div>
+        </div>
+        <div class="subtitle" style="margin-top: 1rem;">📡 Списки серверов vless:</div>
+        <div class="server-list" id="vless-servers">
+            <!-- dynamic from lists -->
+        </div>
+    </div>
+
+    <!-- ==================== TELEGRAM PROXY SECTION ==================== -->
+    <div class="section-card">
+        <h2 class="section-title">📡 Telegram Proxy (MTProto)</h2>
+        <div class="subtitle">
+            <strong>Что такое MTProto Proxy?</strong> — Специализированный прокси-протокол для Telegram, 
+            обеспечивающий высокую скорость и шифрование. Работает через секретный ключ (secret), 
+            который связывает клиент и сервер. Позволяет обходить блокировки и сохранять приватность. 
+            Просто нажмите на ссылку — Telegram автоматически применит настройки.
+        </div>
+        <div id="mtproto-list" class="server-list">
+            <!-- proxy rows will be injected -->
+        </div>
+    </div>
+
+    <!-- ==================== PROJECTS SECTION ==================== -->
+    <div class="section-card">
+        <h2 class="section-title">🚀 Проекты</h2>
+        <div class="subtitle">Избранные репозитории JeBance:</div>
+        <div id="projects-container"></div>
+    </div>
+
+    <!-- ==================== SUGGESTIONS (ПРЕДЛОЖЕНИЯ) ==================== -->
+    <div class="section-card">
+        <h2 class="section-title">💡 Предложения</h2>
+        <div class="subtitle">
+            Вы можете предложить идеи, сообщить об ошибках или поучаствовать в развитии проектов через Issues на GitHub.
+            Также открыт для фич-реквестов в Telegram. Любая обратная связь приветствуется!
+        </div>
+        <div style="margin-top: 1rem; background: #ecf7f0; padding: 0.8rem 1.2rem; border-radius: 24px;">
+            ✨ <strong>Как предложить:</strong> напишите в Telegram <strong>@JeBance</strong> или создайте Issue в нужном репозитории. 
+            Спасибо за поддержку!
+        </div>
+    </div>
+
+    <!-- ==================== CONTACTS ==================== -->
+    <div class="section-card">
+        <h2 class="section-title">📬 Контакты</h2>
+        <div class="contacts-links">
+            <div class="contact-badge"><a href="https://t.me/JeBance" target="_blank">💬 @JeBance (личный)</a></div>
+            <div class="contact-badge"><a href="https://t.me/JeBanceOnline" target="_blank">📢 @JeBanceOnline (канал)</a></div>
+        </div>
+    </div>
+    <footer>© JeBance | 2026</footer>
+</div>
+
+<!-- Модальное окно (один на все QR) -->
+<div id="qrModal" class="modal">
+    <div class="modal-content">
+        <div id="modalQrText" class="qr-link-label"></div>
+        <div id="qrcodeCanvas"></div>
+        <button class="modal-close" id="closeModalBtn">Закрыть</button>
+    </div>
+</div>
+
+<script>
+    // ----- Данные проектов с краткими описаниями (на основе репозиториев)
+    const projectsData = [
+        { name: "CheburNet", url: "https://github.com/JeBance/CheburNet", desc: "Сеть прокси-серверов v2ray/vless с автоматической ротацией и скриптами управления." },
+        { name: "server-bot", url: "https://github.com/JeBance/server-bot", desc: "Telegram-бот для мониторинга серверов, уведомлений и выполнения команд удалённо." },
+        { name: "QwenAlpha", url: "https://github.com/JeBance/QwenAlpha", desc: "Интеграция с языковыми моделями Qwen, обёртка для AI-чата и эксперименты." },
+        { name: "youtube-downloader-bot", url: "https://github.com/JeBance/youtube-downloader-bot", desc: "Telegram бот для скачивания видео/аудио с YouTube." },
+        { name: "telegrab", url: "https://github.com/JeBance/telegrab", desc: "Утилита для архивирования сообщений и медиа из Telegram каналов/чатов." },
+        { name: "family-tree", url: "https://github.com/JeBance/family-tree", desc: "Визуализация генеалогического древа с интерактивными элементами." },
+        { name: "qrcodeScanner", url: "https://github.com/JeBance/qrcodeScanner", desc: "PWA сканер QR-кодов." },
+        { name: "StopAdwarePWA", url: "https://github.com/JeBance/StopAdwarePWA", desc: "Блокировщик рекламы и вредоносных скриптов в виде прогрессивного веб-приложения." },
+        { name: "stirlits", url: "https://github.com/JeBance/stirlits", desc: "PWA шифратор/дешифратор файлов." }
+    ];
+
+    // Список vless ссылок
+    const vlessUrls = [
+        "https://raw.githubusercontent.com/JeBance/CheburNet/gh-pages/cheburnet.txt",
+        "https://raw.githubusercontent.com/zieng2/wl/main/vless_lite.txt"
+    ];
+
+    // Список MTProto прокси (как ссылки t.me/proxy)
+    const mtProtoProxies = [
+        "https://t.me/proxy?server=mt.jebance.ru&port=8443&secret=dd28df1727029aed45d15f3a44d31e7e20",
+        "https://t.me/proxy?server=mtproto.eu&port=443&secret=bd22cd34081c9420e8515a153186e632",
+        "https://t.me/proxy?server=tg.magproxy.com&port=443&secret=eeb30fc4df699024f7a5dec0b0e66524b165682e766b2e636f6d",
+        "https://t.me/proxy?server=www.hombus.co.uk.&port=22&secret=fgScoaLSXQYtLCM8VHoNngfgScoaLSXQYtLCM8VHoNngfgScoaLSXQYtLCM8VHoNngfgScoaLSXQYtLCM8VHoNngfgScoaLSXQYtLCM8VHoNngfgScoaLSXQYtLCM8VHoNngfgScoaLSXQYtLCM8VHoNng%3D%3D",
+        "https://t.me/proxy?server=de.nerdpol.ovh&port=4516&secret=ee85fca33eab6bfe3ccb83a2fed11dd67a64652e6e657264706f6c2e6f7668",
+        "https://t.me/proxy?server=nitro.alotaxi.info&port=4515&secret=eee9a4f23b1d768c04a8d7f39120ca5b6e626973636f7474692e79656b74616e65742e636f6d",
+        "https://t.me/proxy?server=peyk.acharbashi.info&port=4515&secret=eee9a4f23b1d768c04a8d7f39120ca5b6e626973636f7474692e79656b74616e65742e636f6d"
+    ];
+
+    // отрисовка проектов
+    function renderProjects() {
+        const container = document.getElementById('projects-container');
+        if (!container) return;
+        container.innerHTML = '';
+        projectsData.forEach(proj => {
+            const projDiv = document.createElement('div');
+            projDiv.className = 'project-item';
+            projDiv.innerHTML = `
+                <a href="${proj.url}" target="_blank">📁 ${proj.name}</a>
+                <div class="project-desc">${proj.desc}</div>
+            `;
+            container.appendChild(projDiv);
+        });
+    }
+
+    // отрисовка vless списков (ссылки на txt файлы) с кнопкой QR
+    function renderVlessServers() {
+        const vlessContainer = document.getElementById('vless-servers');
+        if (!vlessContainer) return;
+        vlessContainer.innerHTML = '';
+        vlessUrls.forEach((url, idx) => {
+            const row = document.createElement('div');
+            row.className = 'server-row';
+            const linkSpan = document.createElement('span');
+            linkSpan.className = 'server-url';
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.textContent = url.length > 70 ? url.substring(0, 70) + '…' : url;
+            link.title = url;
+            linkSpan.appendChild(link);
+            const qrBtn = document.createElement('button');
+            qrBtn.className = 'btn-qr';
+            qrBtn.textContent = 'QR код';
+            qrBtn.setAttribute('data-url', url);
+            qrBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openQrModal(url);
+            });
+            row.appendChild(linkSpan);
+            row.appendChild(qrBtn);
+            vlessContainer.appendChild(row);
+        });
+    }
+
+    // отрисовка MTProto прокси
+    function renderMtProtoProxies() {
+        const mtContainer = document.getElementById('mtproto-list');
+        if (!mtContainer) return;
+        mtContainer.innerHTML = '';
+        mtProtoProxies.forEach(proxyLink => {
+            const row = document.createElement('div');
+            row.className = 'server-row';
+            const linkSpan = document.createElement('span');
+            linkSpan.className = 'server-url';
+            const a = document.createElement('a');
+            a.href = proxyLink;
+            a.target = '_blank';
+            // сокращённый показ
+            let shortLink = proxyLink.length > 70 ? proxyLink.substring(0, 70) + '…' : proxyLink;
+            a.textContent = shortLink;
+            a.title = proxyLink;
+            linkSpan.appendChild(a);
+            const qrBtn = document.createElement('button');
+            qrBtn.className = 'btn-qr';
+            qrBtn.textContent = 'QR код';
+            qrBtn.setAttribute('data-url', proxyLink);
+            qrBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openQrModal(proxyLink);
+            });
+            row.appendChild(linkSpan);
+            row.appendChild(qrBtn);
+            mtContainer.appendChild(row);
+        });
+    }
+
+    // Также обработаем кнопки QR у VPN-клиентов (которые уже вставлены статически, но добавим динамически обработчики)
+    function attachClientQrHandlers() {
+        const clientButtons = document.querySelectorAll('#vpn-clients .btn-qr');
+        clientButtons.forEach(btn => {
+            const url = btn.getAttribute('data-url');
+            if (url) {
+                // удаляем возможные старые слушатели
+                btn.removeEventListener('click', clientClickHandler);
+                btn.addEventListener('click', clientClickHandler);
+            }
+        });
+    }
+    function clientClickHandler(e) {
+        const url = e.currentTarget.getAttribute('data-url');
+        if (url) openQrModal(url);
+    }
+
+    // ----- глобальное модальное окно + qr генерация
+    let currentQr = null;
+    function openQrModal(url) {
+        const modal = document.getElementById('qrModal');
+        const qrContainer = document.getElementById('qrcodeCanvas');
+        const modalText = document.getElementById('modalQrText');
+        if (!modal || !qrContainer) return;
+
+        // очистка старых qr
+        qrContainer.innerHTML = '';
+        modalText.innerText = `QR код для:\n${url.length > 80 ? url.substring(0,80)+'…' : url}`;
+        
+        // Используем библиотеку QRCode
+        try {
+            // создаем новый QRCode в div
+            new QRCode(qrContainer, {
+                text: url,
+                width: 200,
+                height: 200,
+                colorDark: "#1f2f3e",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        } catch(err) {
+            qrContainer.innerHTML = `<div style="padding:1rem;color:red;">Ошибка генерации QR</div>`;
+            console.error(err);
+        }
+        
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('qrModal');
+        if (modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+            const qrContainer = document.getElementById('qrcodeCanvas');
+            if (qrContainer) qrContainer.innerHTML = '';
+        }
+    }
+
+    // инициализация всех разделов
+    function init() {
+        renderProjects();
+        renderVlessServers();
+        renderMtProtoProxies();
+        attachClientQrHandlers();
+
+        // закрытие модалки
+        const modal = document.getElementById('qrModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+        }
+
+        // добавим также поддержку для будущих динамических элементов? нет, все уже отрисованы.
+        // Дополнительно: ссылки на "Предложения" уже готовы. 
+        // Обработаем клики для возможных кнопок в проектах — не требуется.
+    }
+
+    // запуск
+    init();
+</script>
+</body>
+</html>
